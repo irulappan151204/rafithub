@@ -2,26 +2,224 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+    :root {
+        /* Dark Theme (Default) */
+        --background: #0a0a0a;
+        --foreground: #ffffff;
+        --card: #1a1a1a;
+        --card-foreground: #ffffff;
+        --popover: #0a0a0a;
+        --popover-foreground: #ffffff;
+        --primary: #00ff88;
+        --primary-foreground: #0a0a0a;
+        --secondary: #ffd700;
+        --secondary-foreground: #0a0a0a;
+        --muted: #2a2a2a;
+        --muted-foreground: #a1a1aa;
+        --accent: #2a2a2a;
+        --accent-foreground: #ffffff;
+        --destructive: #ef4444;
+        --destructive-foreground: #ffffff;
+        --border: #2a2a2a;
+        --input: #2a2a2a;
+        --ring: #00ff88;
+
+        /* Custom Brand Colors for utility usage */
+        --gym-black: #0a0a0a;
+        --gym-green: #00ff88;
+        --gym-gold: #ffd700;
+    }
+
+    [data-theme="light"] {
+        /* Light Theme */
+        --background: #f8f9fa;
+        --foreground: #111827;
+        --card: #ffffff;
+        --card-foreground: #111827;
+        --popover: #ffffff;
+        --popover-foreground: #111827;
+        --primary: #059652;
+        /* Rich green — high contrast on white */
+        --primary-foreground: #ffffff;
+        --secondary: #b8860b;
+        /* Dark goldenrod — high contrast on white */
+        --secondary-foreground: #ffffff;
+        --muted: #e8eaed;
+        --muted-foreground: #4b5563;
+        /* gray-600 — 7:1 contrast on white */
+        --accent: #e8eaed;
+        --accent-foreground: #111827;
+        --destructive: #dc2626;
+        --destructive-foreground: #ffffff;
+        --border: #d1d5db;
+        /* gray-300 — visible but not harsh */
+        --input: #d1d5db;
+        --ring: #059652;
+
+        /* Re-map custom brand colors for consistency in light mode */
+        --gym-black: #f8f9fa;
+        --gym-green: #059652;
+        --gym-gold: #b8860b;
+    }
+
+    * {
+        @apply border-[var(--border)];
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--foreground);
+        transition-property: background-color, color, border-color, decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@layer components {
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 md:px-8;
+    }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    /* Button Styles - Using CSS Variables */
+    .btn-primary {
+        @apply px-8 py-4 font-bold rounded-lg transition-all duration-300 ease-out hover:opacity-90 hover:scale-105 active:scale-95;
+        background-color: var(--primary);
+        color: var(--primary-foreground);
+    }
+
+    .btn-secondary {
+        @apply px-8 py-4 border-2 font-bold rounded-lg transition-all duration-300 ease-out hover:scale-105 active:scale-95;
+        border-color: var(--secondary);
+        color: var(--secondary);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--secondary);
+        color: var(--secondary-foreground);
+    }
+
+    .btn-outline {
+        @apply px-6 py-3 border font-medium rounded-lg transition-all duration-300 ease-out active:scale-95 bg-transparent;
+        border-color: var(--border);
+        color: var(--foreground);
+    }
+
+    .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* Card Styles */
+    .card-glass {
+        @apply backdrop-blur-md border rounded-2xl transition-all duration-300;
+        border-color: var(--border);
+        /* Manually implement bg-opacity logic broadly or just use solid/mix */
+        background-color: var(--card);
+    }
+
+    /* If we can use modern CSS: */
+    @supports (background-color: color-mix(in srgb, red, blue)) {
+        .card-glass {
+            background-color: color-mix(in srgb, var(--card) 85%, transparent);
+        }
+    }
+
+    .card-gradient {
+        @apply border rounded-2xl transition-all duration-300;
+        border-color: var(--border);
+        background-image: linear-gradient(to bottom right, var(--background), var(--muted));
+    }
+
+    /* Typography */
+    .heading-xl {
+        @apply text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-tight;
+    }
+
+    .heading-lg {
+        @apply text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight;
+    }
+
+    .heading-md {
+        @apply text-3xl md:text-4xl font-bold;
+    }
+
+    /* Text Gradients */
+    .text-gradient-gold {
+        @apply bg-clip-text text-transparent;
+        background-image: linear-gradient(to right, var(--secondary), #ffe45e);
+    }
+
+    .text-gradient-green {
+        @apply bg-clip-text text-transparent;
+        background-image: linear-gradient(to right, var(--primary), #4ade80);
+    }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-gym-green {
+        color: var(--gym-green);
+    }
+
+    .text-gym-gold {
+        color: var(--gym-gold);
+    }
+
+    .bg-gym-black {
+        background-color: var(--background);
+    }
+
+    .bg-gym-black-light {
+        background-color: var(--card);
+    }
+
+    .bg-gym-black-lighter {
+        background-color: var(--muted);
+    }
+}
+
+/* Missing utility classes */
+@layer components {
+    .heading-sm {
+        @apply text-xl md:text-2xl font-bold;
+    }
+
+    .section-padding {
+        @apply py-16 md:py-24 lg:py-32 px-4;
+    }
+}
+
+/* Focus-visible styles for keyboard navigation */
+@layer base {
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-[var(--primary)] rounded-sm;
+    }
+}
+
+/* Hero Media — Responsive device-specific styles */
+@layer components {
+    .hero-desktop-image {
+        @apply absolute w-full h-full;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .hero-mobile-video {
+        @apply absolute w-full h-full;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+/* CSS fallback: hide wrong device media (defense-in-depth alongside JS) */
+@media (max-width: 768px) {
+    .hero-desktop-image {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .hero-mobile-video {
+        display: none !important;
+    }
 }
