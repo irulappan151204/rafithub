@@ -34,8 +34,9 @@ export default function StructuredData() {
             },
         ],
         sameAs: [
-            "https://www.instagram.com/rafithub",
-            "https://www.facebook.com/rafithub",
+            "https://www.instagram.com/rafithub_madurai?igsh=MTluM2VoZWdzeGZ5aQ==",
+            "https://www.facebook.com/rafithubmdu",
+            "https://x.com/rafithubmdu?t=aVFRyrI4pHJ626V6yzkdBQ&s=09"
         ],
         priceRange: "$$",
     };

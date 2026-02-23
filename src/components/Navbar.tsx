@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import ThemeToggle from "./ThemeToggle";
@@ -56,10 +57,23 @@ export default function Navbar() {
                             whileTap={{ scale: 0.95 }}
                             className="flex items-center gap-2"
                         >
-                            <div className="w-10 h-10 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)]/80 rounded-lg flex items-center justify-center text-[var(--primary-foreground)] font-bold text-xl shadow-lg">
-                                R
-                            </div>
-                            <span className="font-display text-2xl tracking-wide text-[var(--foreground)]">
+                            <Image
+                                src="/assets/logo/logo_black.png"
+                                alt="Rafithub Logo"
+                                width={160}
+                                height={40}
+                                className="h-10 w-auto object-contain dark:hidden block"
+                                priority
+                            />
+                            <Image
+                                src="/assets/logo/logo_white.png"
+                                alt="Rafithub Logo"
+                                width={160}
+                                height={40}
+                                className="h-10 w-auto object-contain hidden dark:block"
+                                priority
+                            />
+                            <span className="font-display text-2xl tracking-wide text-[var(--foreground)] hidden sm:block">
                                 RAFI<span className="text-[var(--primary)]">THUB</span>
                             </span>
                         </motion.div>

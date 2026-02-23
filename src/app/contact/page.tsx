@@ -60,10 +60,9 @@ const contactInfo = [
 ];
 
 const socialLinks = [
-    { Icon: FaFacebookF, href: "#", label: "Facebook", color: "#1877F2" },
-    { Icon: FaInstagram, href: "#", label: "Instagram", color: "#E4405F" },
-    { Icon: FaTwitter, href: "#", label: "Twitter", color: "#1DA1F2" },
-    { Icon: FaYoutube, href: "#", label: "YouTube", color: "#FF0000" },
+    { Icon: FaFacebookF, href: "https://www.facebook.com/rafithubmdu", label: "Facebook", color: "#1877F2" },
+    { Icon: FaInstagram, href: "https://www.instagram.com/rafithub_madurai?igsh=MTluM2VoZWdzeGZ5aQ==", label: "Instagram", color: "#E4405F" },
+    { Icon: FaTwitter, href: "https://x.com/rafithubmdu?t=aVFRyrI4pHJ626V6yzkdBQ&s=09", label: "X (Twitter)", color: "#000000" },
     { Icon: FaWhatsapp, href: "https://wa.me/917603903131", label: "WhatsApp", color: "#25D366" },
 ];
 

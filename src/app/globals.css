@@ -204,7 +204,7 @@
         object-position: center;
     }
 
-    .hero-mobile-video {
+    .hero-mobile-image {
         @apply absolute w-full h-full;
         object-fit: cover;
         object-position: center;
@@ -219,7 +219,7 @@
 }
 
 @media (min-width: 769px) {
-    .hero-mobile-video {
+    .hero-mobile-image {
         display: none !important;
     }
 }

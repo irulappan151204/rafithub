@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s | Rafithub",
   },
   description:
-    "Rafithub is a premium fitness center offering personal training, group programs, and transformation-focused workouts in Madurai. Join us to transform your body and mind.",
+    "Rafithub is a premium fitness center in Madurai offering expert personal training, group fitness programs, strength training, crossfit, and transformation-focused workouts. Join our elite gym to transform your body and mind with certified trainers.",
   keywords: [
     "gym in madurai",
     "fitness center madurai",
@@ -38,6 +38,17 @@ export const metadata: Metadata = {
     "strength training",
     "crossfit madurai",
     "weight loss program",
+    "bodybuilding madurai",
+    "functional training",
+    "fitness classes madurai",
+    "cardio workout madurai",
+    "muscle building",
+    "health club madurai",
+    "kochadai gym",
+    "premium gym madurai",
+    "gym with certified trainers",
+    "weight gain program",
+    "fitness coaching",
   ],
   authors: [{ name: "Rafithub" }],
   openGraph: {

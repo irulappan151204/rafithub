@@ -40,23 +40,24 @@ function DesktopHeroMedia() {
 }
 
 // ──────────────────────────────────────────────
-// Mobile Hero Media — Autoplay Video
+// Mobile Hero Media — Static Image with WebP + JPG
 // ──────────────────────────────────────────────
 function MobileHeroMedia() {
     return (
-        <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/assets/hero/hero-mobile-poster.webp"
-            className="hero-mobile-video"
-        >
-            <source src="/assets/hero/hero-mobile.webm" type="video/webm" />
-            <source src="/assets/hero/hero-mobile.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
+        <picture>
+            <source
+                srcSet="/assets/hero/hero-mobile.webp"
+                type="image/webp"
+            />
+            <img
+                src="/assets/hero/hero-mobile.jpg"
+                alt="Rafithub gym - intense training session"
+                fetchPriority="high"
+                width={768}
+                height={1024}
+                className="hero-mobile-image"
+            />
+        </picture>
     );
 }
 
@@ -67,15 +68,15 @@ function Hero() {
     const { isMobile } = useDeviceType();
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--background)]">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gym-black">
             {/* Background Media with Overlay */}
             <div className="absolute inset-0 z-0">
                 {/* Conditional Media: Desktop Image / Mobile Video */}
                 {isMobile ? <MobileHeroMedia /> : <DesktopHeroMedia />}
 
-                {/* Gradient Overlays — theme-aware for dark + light mode */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--background)] via-[var(--background)]/35 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-[var(--background)]/30" />
+                {/* Gradient Overlays — fixed for consistent dark look */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
 
                 {/* Animated Grid Pattern */}
                 <div className="absolute inset-0 opacity-30">
@@ -83,7 +84,7 @@ function Hero() {
                         className="w-full h-full"
                         style={{
                             backgroundImage:
-                                "linear-gradient(color-mix(in srgb, var(--foreground) 15%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--foreground) 15%, transparent) 1px, transparent 1px)",
+                                "linear-gradient(color-mix(in srgb, white 15%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, white 15%, transparent) 1px, transparent 1px)",
                             backgroundSize: "50px 50px",
                         }}
                     />
@@ -111,7 +112,7 @@ function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="heading-xl text-[var(--foreground)] mb-4"
+                        className="heading-xl text-white mb-4"
                     >
                         Transform Your
                         <br />
@@ -123,7 +124,7 @@ function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-xl md:text-2xl text-[var(--foreground)]/80 max-w-2xl mb-10 leading-relaxed font-medium"
+                        className="text-xl md:text-2xl text-white/80 max-w-2xl mb-10 leading-relaxed font-medium"
                     >
                         Experience world-class training, cutting-edge equipment, and
                         personalized programs designed to help you achieve your ultimate
@@ -152,7 +153,7 @@ function Hero() {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-8 py-4 border-2 border-[var(--foreground)] text-[var(--foreground)] font-bold rounded-lg transition-all duration-300 ease-out hover:bg-[var(--foreground)] hover:text-[var(--background)] active:scale-95 flex items-center gap-2"
+                                className="px-8 py-4 border-2 border-white text-white font-bold rounded-lg transition-all duration-300 ease-out hover:bg-white hover:text-black active:scale-95 flex items-center gap-2"
                             >
                                 <HiPlay className="w-5 h-5" />
                                 Book a Trial
@@ -183,7 +184,7 @@ function Hero() {
                                 <div className="font-display text-4xl md:text-5xl text-[var(--primary)] mb-1">
                                     {stat.number}
                                 </div>
-                                <div className="text-sm text-[var(--muted-foreground)] uppercase tracking-wider">
+                                <div className="text-sm text-white/60 uppercase tracking-wider">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -204,10 +205,10 @@ function Hero() {
                     transition={{ duration: 1.5, repeat: Infinity }}
                     className="flex flex-col items-center gap-2"
                 >
-                    <span className="text-xs text-[var(--muted-foreground)] uppercase tracking-wider">
+                    <span className="text-xs text-white/50 uppercase tracking-wider">
                         Scroll
                     </span>
-                    <div className="w-6 h-10 border-2 border-[var(--muted-foreground)]/30 rounded-full flex justify-center">
+                    <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
                         <motion.div
                             animate={{ y: [0, 12, 0] }}
                             transition={{ duration: 1.5, repeat: Infinity }}

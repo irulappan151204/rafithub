@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
     FaFacebookF,
     FaInstagram,
@@ -33,10 +34,9 @@ const footerLinks = {
 };
 
 const socialLinks = [
-    { Icon: FaFacebookF, href: "#", label: "Facebook" },
-    { Icon: FaInstagram, href: "#", label: "Instagram" },
-    { Icon: FaTwitter, href: "#", label: "Twitter" },
-    { Icon: FaYoutube, href: "#", label: "YouTube" },
+    { Icon: FaFacebookF, href: "https://www.facebook.com/rafithubmdu", label: "Facebook" },
+    { Icon: FaInstagram, href: "https://www.instagram.com/rafithub_madurai?igsh=MTluM2VoZWdzeGZ5aQ==", label: "Instagram" },
+    { Icon: FaTwitter, href: "https://x.com/rafithubmdu?t=aVFRyrI4pHJ626V6yzkdBQ&s=09", label: "X (Twitter)" },
 ];
 
 export default function Footer() {
@@ -49,10 +49,21 @@ export default function Footer() {
                     <div className="lg:col-span-1">
                         <Link href="/" className="inline-block mb-6">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)]/80 rounded-lg flex items-center justify-center text-[var(--primary-foreground)] font-bold text-xl">
-                                    R
-                                </div>
-                                <span className="font-display text-2xl tracking-wide text-[var(--foreground)]">
+                                <Image
+                                    src="/assets/logo/logo_black.png"
+                                    alt="Rafithub Logo"
+                                    width={160}
+                                    height={40}
+                                    className="h-10 w-auto object-contain dark:hidden block"
+                                />
+                                <Image
+                                    src="/assets/logo/logo_white.png"
+                                    alt="Rafithub Logo"
+                                    width={160}
+                                    height={40}
+                                    className="h-10 w-auto object-contain hidden dark:block"
+                                />
+                                <span className="font-display text-2xl tracking-wide text-[var(--foreground)] hidden sm:block">
                                     RAFI<span className="text-[var(--primary)]">THUB</span>
                                 </span>
                             </div>
