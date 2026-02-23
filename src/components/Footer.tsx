@@ -7,7 +7,6 @@ import {
     FaFacebookF,
     FaInstagram,
     FaTwitter,
-    FaYoutube,
     FaWhatsapp,
 } from "react-icons/fa";
 import { HiMail, HiPhone, HiLocationMarker, HiClock } from "react-icons/hi";

@@ -17,7 +17,6 @@ import {
     FaFacebookF,
     FaInstagram,
     FaTwitter,
-    FaYoutube,
     FaWhatsapp,
 } from "react-icons/fa";
 
