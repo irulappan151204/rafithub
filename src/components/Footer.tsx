@@ -10,6 +10,7 @@ import {
     FaWhatsapp,
 } from "react-icons/fa";
 import { HiMail, HiPhone, HiLocationMarker, HiClock } from "react-icons/hi";
+import { useTheme } from "./ThemeProvider";
 
 const footerLinks = {
     quickLinks: [
@@ -39,6 +40,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+    const { theme } = useTheme();
+
     return (
         <footer className="bg-[var(--card)] border-t border-[var(--border)] text-[var(--foreground)] transition-colors duration-300">
             {/* Main Footer */}
@@ -49,18 +52,11 @@ export default function Footer() {
                         <Link href="/" className="inline-block mb-6">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src="/assets/logo/logo_black.png"
+                                    src={theme === "dark" ? "/assets/logo/logo_white.png" : "/assets/logo/logo_black.png"}
                                     alt="Rafithub Logo"
                                     width={160}
                                     height={40}
-                                    className="h-10 w-auto object-contain dark:hidden block"
-                                />
-                                <Image
-                                    src="/assets/logo/logo_white.png"
-                                    alt="Rafithub Logo"
-                                    width={160}
-                                    height={40}
-                                    className="h-10 w-auto object-contain hidden dark:block"
+                                    className="h-10 w-auto object-contain"
                                 />
                                 <span className="font-display text-2xl tracking-wide text-[var(--foreground)] hidden sm:block">
                                     RAFI<span className="text-[var(--primary)]">THUB</span>

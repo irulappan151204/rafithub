@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
+import { TiltCard } from "./PremiumMotion";
 import { HiCheck, HiStar } from "react-icons/hi";
 
 const plans = [
@@ -58,7 +59,7 @@ const plans = [
 
 export default function MembershipPlans() {
     return (
-        <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
+        <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background Elements */}
             <div className="absolute inset-0">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--primary)]/5 rounded-full blur-3xl" />
@@ -67,7 +68,7 @@ export default function MembershipPlans() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-12">
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
+                    <span className="section-kicker">
                         Membership Plans
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -83,10 +84,10 @@ export default function MembershipPlans() {
                 <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                     {plans.map((plan) => (
                         <StaggerItem key={plan.name}>
-                            <motion.div
-                                whileHover={{ y: -10 }}
+                            <TiltCard
                                 className={`relative h-full ${plan.popular ? "lg:-mt-4 lg:mb-4" : ""
                                     }`}
+                                depth={plan.popular ? 12 : 8}
                             >
                                 {/* Popular Badge */}
                                 {plan.popular && (
@@ -100,7 +101,7 @@ export default function MembershipPlans() {
 
                                 {/* Card */}
                                 <div
-                                    className={`h-full p-8 rounded-3xl border transition-all duration-300 ${plan.popular
+                                    className={`h-full rounded-3xl border p-8 transition-all duration-300 ${plan.popular
                                         ? "bg-gradient-to-b from-[var(--primary)]/10 to-[var(--card)] border-[var(--primary)]/50 hover:border-[var(--primary)] shadow-lg"
                                         : "bg-[var(--card)] border-[var(--border)] hover:border-[var(--primary)]/30"
                                         }`}
@@ -163,7 +164,7 @@ export default function MembershipPlans() {
                                         </motion.button>
                                     </Link>
                                 </div>
-                            </motion.div>
+                            </TiltCard>
                         </StaggerItem>
                     ))}
                 </StaggerContainer>

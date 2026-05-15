@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { HiLightningBolt, HiHeart, HiFire, HiShieldCheck } from "react-icons/hi";
 
 // New data structure for workout-based classes
@@ -120,21 +121,19 @@ const programs = [
 
 export default function ClassesPage() {
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero */}
-            <section className="py-16 px-4 md:px-8 text-center">
-                <FadeUp>
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                        Our Programs
-                    </span>
-                    <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                        World-Class <span className="text-gradient-gold">Workouts</span>
-                    </h1>
-                    <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">
-                        Discover a variety of training styles designed to help you achieve specific fitness goals, from building muscle to improving endurance.
-                    </p>
-                </FadeUp>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Our Programs"
+                title={<>World-Class <span className="text-gradient-gold">Workouts</span></>}
+                description="Discover a variety of training styles designed to help you achieve specific fitness goals, from building muscle to improving endurance."
+                imageSrc="https://images.unsplash.com/photo-1517963879433-6ad2b056d712?w=1920&q=80"
+                stats={[
+                    { value: "10", label: "Programs" },
+                    { value: "100+", label: "Weekly Classes" },
+                    { value: "All", label: "Levels" },
+                    { value: "45m", label: "Avg Block" },
+                ]}
+            />
 
             {/* Programs Grid */}
             <section className="container-custom px-4 md:px-8 pb-20">

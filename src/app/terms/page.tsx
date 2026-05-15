@@ -2,16 +2,19 @@
 
 import { FadeUp } from "@/components/ScrollAnimations";
 import Link from "next/link";
+import PageHero from "@/components/PageHero";
 
 export default function TermsPage() {
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="House Rules"
+                title={<>Terms & <span className="text-gradient-gold">Conditions</span></>}
+                description="Membership expectations, gym etiquette, billing terms, and safety responsibilities."
+                imageSrc="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&q=80"
+                align="left"
+            />
             <section className="container-custom px-4 md:px-8 py-16">
-                <FadeUp>
-                    <h1 className="heading-lg text-[var(--foreground)] mb-8">
-                        Terms & <span className="text-gradient-gold">Conditions</span>
-                    </h1>
-                </FadeUp>
 
                 <FadeUp delay={0.1}>
                     <div className="prose prose-lg max-w-none space-y-8">

@@ -7,6 +7,9 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ScrollToTop from "@/components/ScrollToTop";
 import StructuredData from "@/components/StructuredData";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import AmbientScene from "@/components/AmbientScene";
+import PageTransition from "@/components/PageTransition";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -95,15 +98,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${bebas.variable}`} suppressHydrationWarning>
-      <body className="bg-gym-black text-[var(--foreground)] antialiased transition-colors duration-300">
+      <body className="bg-[var(--background)] text-[var(--foreground)] antialiased transition-colors duration-300">
         <StructuredData />
         <ThemeProvider>
-          <ScrollToTop />
-          <SmoothScroll>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-          </SmoothScroll>
+          <ErrorBoundary>
+            <ScrollToTop />
+            <AmbientScene />
+            <SmoothScroll>
+              <Navbar />
+              <main className="relative z-10">
+                <PageTransition>{children}</PageTransition>
+              </main>
+              <Footer />
+            </SmoothScroll>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

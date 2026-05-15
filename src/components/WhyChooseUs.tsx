@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
+import { TiltCard } from "./PremiumMotion";
 import {
     HiUserGroup,
     HiClock,
@@ -89,7 +90,7 @@ function AnimatedCounter({ target }: { target: number }) {
 
 export default function WhyChooseUs() {
     return (
-        <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
+        <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background Elements */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl" />
@@ -99,7 +100,7 @@ export default function WhyChooseUs() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
+                    <span className="section-kicker">
                         Why Choose Us
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -115,13 +116,11 @@ export default function WhyChooseUs() {
                 <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
                     {features.map((feature) => (
                         <StaggerItem key={feature.title}>
-                            <motion.div
-                                whileHover={{ y: -8, scale: 1.02 }}
-                                className="card-glass p-8 h-full group cursor-pointer bg-[var(--card)]/80"
-                            >
+                            <TiltCard className="card-glass group cursor-pointer p-8" depth={9}>
+                                <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[var(--primary)]/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                                 <motion.div
                                     whileHover={{ scale: 1.1, rotate: 5 }}
-                                    className="w-14 h-14 bg-[var(--primary)]/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[var(--primary)]/20 transition-colors"
+                                    className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--primary)]/20 bg-[var(--primary)]/10 shadow-[0_0_30px_color-mix(in_srgb,var(--primary)_14%,transparent)] transition-colors group-hover:bg-[var(--primary)]/20"
                                 >
                                     <feature.icon className="w-7 h-7 text-[var(--primary)]" />
                                 </motion.div>
@@ -131,14 +130,15 @@ export default function WhyChooseUs() {
                                 <p className="text-[var(--muted-foreground)] leading-relaxed">
                                     {feature.description}
                                 </p>
-                            </motion.div>
+                            </TiltCard>
                         </StaggerItem>
                     ))}
                 </StaggerContainer>
 
                 {/* Stats Section */}
                 <FadeUp delay={0.3}>
-                    <div className="bg-gradient-to-r from-[var(--card)] to-[var(--muted)] border border-[var(--border)] rounded-3xl p-8 md:p-12">
+                    <div className="card-gradient overflow-hidden rounded-3xl p-8 md:p-12">
+                        <div className="absolute inset-0 kinetic-grid opacity-25" />
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                             {stats.map((stat, index) => (
                                 <motion.div

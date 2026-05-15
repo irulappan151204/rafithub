@@ -1,16 +1,16 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
 import { FadeUp, SlideLeft, SlideRight, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { HiHeart, HiLightningBolt, HiUserGroup, HiStar } from "react-icons/hi";
 
 const timeline = [
     {
         year: "2009",
         title: "The Dream Begins",
-        description: "Rafithub was founded in a small 2,000 sq ft space with just 5 trainers and a vision to transform lives.",
+        description: "Rafithub was founded in a small 2,000 sq ft space with a small team and a vision to transform lives.",
     },
     {
         year: "2012",
@@ -35,7 +35,7 @@ const timeline = [
     {
         year: "2024",
         title: "Industry Leader",
-        description: "Named #1 premium gym in the city with 10,000+ members and 50+ certified trainers.",
+        description: "Named #1 premium gym in the city with 10,000+ members and a team of elite specialized coaches.",
     },
 ];
 
@@ -63,62 +63,35 @@ const values = [
 ];
 
 export default function AboutPage() {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"],
-    });
-
-    const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero */}
-            <section className="relative py-20 px-4 md:px-8 overflow-hidden">
-                <motion.div
-                    style={{ y }}
-                    className="absolute inset-0 -z-10"
-                >
-                    <Image
-                        src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
-                        alt="Gym background"
-                        fill
-                        className="object-cover opacity-20"
-                    />
-                </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)] via-transparent to-[var(--background)] -z-10" />
-
-                <div className="container-custom text-center">
-                    <FadeUp>
-                        <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                            About Us
-                        </span>
-                        <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                            Our <span className="text-gradient-gold">Story</span>
-                        </h1>
-                        <p className="text-[var(--muted-foreground)] max-w-3xl mx-auto mt-4 text-lg">
-                            From a small garage gym to the city&apos;s premier fitness destination, Rafithub has been
-                            transforming lives for over 15 years. Our journey is defined by passion, innovation,
-                            and an unwavering commitment to our members.
-                        </p>
-                    </FadeUp>
-                </div>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="About Us"
+                title={<>Our <span className="text-gradient-gold">Story</span></>}
+                description="From a focused training floor to Madurai's premium fitness destination, Rafithub has been transforming lives for over 15 years through passion, innovation, and an unwavering commitment to members."
+                imageSrc="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
+                stats={[
+                    { value: "2009", label: "Founded" },
+                    { value: "10K+", label: "Members" },
+                    { value: "25K", label: "Sq Ft" },
+                    { value: "4.9", label: "Rating" },
+                ]}
+            />
 
             {/* Founder Section */}
-            <section ref={containerRef} className="container-custom px-4 md:px-8 py-20">
+            <section className="container-custom px-4 md:px-8 py-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <SlideRight>
                         <div className="relative aspect-square rounded-3xl overflow-hidden">
                             <Image
-                                src="https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=800&h=800&fit=crop"
-                                alt="Founder"
+                                src="/trainers/1.jpg"
+                                alt="Founder Dr. Ranjith"
                                 fill
                                 className="object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/80 to-transparent" />
                             <div className="absolute bottom-8 left-8">
-                                <h3 className="text-2xl font-bold text-white">John Rafith</h3>
+                                <h3 className="text-2xl font-bold text-white">Dr. Ranjith</h3>
                                 <p className="text-[var(--secondary)]">Founder & CEO</p>
                             </div>
                         </div>
@@ -154,7 +127,7 @@ export default function AboutPage() {
                                     <div className="text-[var(--muted-foreground)] text-sm">Lives Changed</div>
                                 </div>
                                 <div>
-                                    <div className="font-display text-4xl text-[var(--primary)]">50+</div>
+                                    <div className="font-display text-4xl text-[var(--primary)]">6+</div>
                                     <div className="text-[var(--muted-foreground)] text-sm">Expert Trainers</div>
                                 </div>
                             </div>

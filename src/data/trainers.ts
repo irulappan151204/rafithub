@@ -28,10 +28,10 @@ export interface Trainer {
 export const trainers: Trainer[] = [
     {
         id: "rajith",
-        name: "Mr. Rajith",
+        name: "Dr. Ranjith",
         role: "CEO & Head Coach — RafiHub Fitness",
         title: "Mr. India Champion | Elite Performance Coach",
-        image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/1.jpg",
         isFeatured: true,
         specializations: [
             "Competitive Bodybuilding & Contest Prep",
@@ -69,7 +69,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Antony",
         role: "Senior Strength & Combat Coach",
         title: "Power Training Specialist | Combat Fitness Expert",
-        image: "https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/2.jpg",
         specializations: [
             "Powerlifting & Strength Programming",
             "Combat Fitness & MMA Conditioning",
@@ -104,7 +104,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Ganesh",
         role: "Fitness Coach & Body Transformation Specialist",
         title: "Physique Expert | Natural Bodybuilding Advocate",
-        image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/3.jpg",
         specializations: [
             "Natural Bodybuilding & Physique Development",
             "Body Recomposition (Fat Loss + Muscle Gain)",
@@ -139,7 +139,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Madurakavi",
         role: "Chief Dietitian & Nutrition Coach",
         title: "Clinical Nutritionist | Wellness Strategist",
-        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/4.jpg",
         specializations: [
             "Clinical & Sports Dietetics",
             "Weight Management & Metabolic Health",
@@ -177,7 +177,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Prabha",
         role: "Yoga & Functional Fitness Coach",
         title: "Mind-Body Performance Expert | Mobility Specialist",
-        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/5.jpg",
         specializations: [
             "Advanced Yoga & Pranayama",
             "Functional Movement & Mobility Training",
@@ -211,10 +211,10 @@ export const trainers: Trainer[] = [
     },
     {
         id: "sophiea",
-        name: "Ms. Sophiea",
+        name: "Ms. Sofia",
         role: "Women's Fitness & Lifestyle Coach",
         title: "Women's Transformation Expert | HIIT & Wellness Specialist",
-        image: "https://images.unsplash.com/photo-1594381898411-846e7d193883?w=600&h=800&fit=crop&crop=face",
+        image: "/trainers/6.jpg",
         accentColor: "#4ade80",
         specializations: [
             "Women's Body Transformation & Toning",

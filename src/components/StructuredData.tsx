@@ -1,23 +1,25 @@
+import { socialLinks, businessInfo } from "@/data/contact";
+
 export default function StructuredData() {
     const schema = {
         "@context": "https://schema.org",
         "@type": "Gym",
-        name: "Rafithub",
-        image: "https://rafithub.com/og-image.jpg",
-        "@id": "https://rafithub.com",
-        url: "https://rafithub.com",
-        telephone: "+917603903131",
+        name: businessInfo.name,
+        image: `${businessInfo.url}/og-image.jpg`,
+        "@id": businessInfo.url,
+        url: businessInfo.url,
+        telephone: businessInfo.telephone,
         address: {
             "@type": "PostalAddress",
-            streetAddress: "1st Floor, 3/5B ABHI Complex, QMIS, Kochadai",
-            addressLocality: "Madurai",
-            postalCode: "625019",
-            addressCountry: "IN",
+            streetAddress: businessInfo.streetAddress,
+            addressLocality: businessInfo.addressLocality,
+            postalCode: businessInfo.postalCode,
+            addressCountry: businessInfo.addressCountry,
         },
         geo: {
             "@type": "GeoCoordinates",
-            latitude: 9.9252,
-            longitude: 78.0838,
+            latitude: businessInfo.latitude,
+            longitude: businessInfo.longitude,
         },
         openingHoursSpecification: [
             {
@@ -33,12 +35,10 @@ export default function StructuredData() {
                 closes: "14:00",
             },
         ],
-        sameAs: [
-            "https://www.instagram.com/rafithub_madurai?igsh=MTluM2VoZWdzeGZ5aQ==",
-            "https://www.facebook.com/rafithubmdu",
-            "https://x.com/rafithubmdu?t=aVFRyrI4pHJ626V6yzkdBQ&s=09"
-        ],
-        priceRange: "$$",
+        sameAs: socialLinks
+            .filter((s) => s.platform !== "whatsapp")
+            .map((s) => s.href),
+        priceRange: businessInfo.priceRange,
     };
 
     return (
@@ -48,3 +48,4 @@ export default function StructuredData() {
         />
     );
 }
+

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
+import { TiltCard } from "./PremiumMotion";
 import {
     GiWeightLiftingUp,
     GiRunningShoe,
@@ -65,7 +66,7 @@ const services = [
 
 export default function Services() {
     return (
-        <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
+        <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-30 pointer-events-none">
                 <div
@@ -82,7 +83,7 @@ export default function Services() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="text-[var(--secondary)] font-medium uppercase tracking-wider text-sm">
+                    <span className="section-kicker text-[var(--secondary)]">
                         Our Services
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -99,12 +100,7 @@ export default function Services() {
                     {services.map((service) => (
                         <StaggerItem key={service.title}>
                             <Link href={service.href}>
-                                <motion.div
-                                    whileHover={{ y: -10 }}
-                                    className="relative group h-full"
-                                >
-                                    {/* Card */}
-                                    <div className="card-glass p-8 h-full relative overflow-hidden bg-[var(--card)]/80">
+                                <TiltCard className="card-glass group p-8" depth={10}>
                                         {/* Hover Glow Effect */}
                                         <div
                                             className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
@@ -114,22 +110,9 @@ export default function Services() {
                                             }}
                                         />
 
-                                        {/* Icon */}
                                         <motion.div
                                             whileHover={{ scale: 1.1, rotate: 10 }}
-                                            className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300`}
-                                            style={{
-                                                backgroundColor: service.color === "gym-green" ? "rgba(var(--gym-green-rgb), 0.1)" : "rgba(var(--gym-gold-rgb), 0.1)", // Fallback needed if rgb vars not set, but using opacity usually works better with direct colors
-                                                background: service.color === "gym-green" ? "var(--primary)" : "var(--secondary)",
-                                                opacity: 0.2
-                                            }}
-                                        >
-                                            {/* Wrapper div for background opacity, actual icon separate */}
-                                        </motion.div>
-                                        {/* Re-doing Icon to avoid complexity with opacity */}
-                                        <motion.div
-                                            whileHover={{ scale: 1.1, rotate: 10 }}
-                                            className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300 bg-[var(--muted)] group-hover:bg-[var(--card)] border border-[var(--border)]`}
+                                            className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--muted)] shadow-inner transition-colors duration-300 group-hover:bg-[var(--card)]`}
                                         >
                                             <service.icon
                                                 className={`w-8 h-8 ${service.color === "gym-green"
@@ -167,8 +150,7 @@ export default function Services() {
                                                 opacity: 0.1
                                             }}
                                         />
-                                    </div>
-                                </motion.div>
+                                </TiltCard>
                             </Link>
                         </StaggerItem>
                     ))}

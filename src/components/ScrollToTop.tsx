@@ -7,8 +7,16 @@ export default function ScrollToTop() {
     const pathname = usePathname();
 
     useEffect(() => {
-        // Scroll to top when route changes
-        window.scrollTo({ top: 0, behavior: "instant" });
+        const resetScroll = () => {
+            window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+
+        resetScroll();
+        const frameId = requestAnimationFrame(resetScroll);
+
+        return () => cancelAnimationFrame(frameId);
     }, [pathname]);
 
     return null;

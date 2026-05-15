@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { HiCheck, HiStar, HiX } from "react-icons/hi";
 
 const membershipPlans = [
@@ -147,21 +148,19 @@ export default function MembershipPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
 
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero */}
-            <section className="py-16 px-4 md:px-8 text-center">
-                <FadeUp>
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                        Membership Plans
-                    </span>
-                    <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                        Choose the Perfect <span className="text-gradient-gold">Plan</span>
-                    </h1>
-                    <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">
-                        Choose the perfect membership plan that fits your fitness goals and budget.
-                    </p>
-                </FadeUp>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Membership Plans"
+                title={<>Choose the Perfect <span className="text-gradient-gold">Plan</span></>}
+                description="Choose the perfect membership plan that fits your fitness goals and budget."
+                imageSrc="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
+                stats={[
+                    { value: "₹2K", label: "Starts At" },
+                    { value: "4", label: "Memberships" },
+                    { value: "3-Day", label: "Trial" },
+                    { value: "PT", label: "Add-ons" },
+                ]}
+            />
 
             {/* Membership Plans */}
             <section className="container-custom px-4 md:px-8 pb-20">
@@ -222,7 +221,7 @@ export default function MembershipPage() {
                                         ))}
                                     </ul>
 
-                                    <Link href="/contact">
+                                    <a href={`https://wa.me/917603903131?text=${encodeURIComponent(`Hi, I'm interested in the ${plan.name} plan at ₹${plan.price}/month.`)}`} target="_blank" rel="noopener noreferrer">
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
@@ -233,7 +232,7 @@ export default function MembershipPage() {
                                         >
                                             Choose Plan
                                         </motion.button>
-                                    </Link>
+                                    </a>
                                 </div>
                             </motion.div>
                         </StaggerItem>
@@ -319,7 +318,7 @@ export default function MembershipPage() {
                                         ))}
                                     </ul>
 
-                                    <Link href="/contact">
+                                    <a href={`https://wa.me/917603903131?text=${encodeURIComponent(`Hi, I'm interested in the ${plan.name} personal training plan.`)}`} target="_blank" rel="noopener noreferrer">
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
@@ -330,7 +329,7 @@ export default function MembershipPage() {
                                         >
                                             Choose Plan
                                         </motion.button>
-                                    </Link>
+                                    </a>
                                 </div>
                             </motion.div>
                         </StaggerItem>

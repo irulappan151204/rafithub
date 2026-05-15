@@ -2,16 +2,19 @@
 
 import { FadeUp } from "@/components/ScrollAnimations";
 import Link from "next/link";
+import PageHero from "@/components/PageHero";
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-gym-black pt-24">
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Member Trust"
+                title={<>Privacy <span className="text-gradient-gold">Policy</span></>}
+                description="How Rafithub handles member information, privacy expectations, and service communications."
+                imageSrc="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=1920&q=80"
+                align="left"
+            />
             <section className="container-custom px-4 md:px-8 py-16">
-                <FadeUp>
-                    <h1 className="heading-lg text-[var(--foreground)] mb-8">
-                        Privacy <span className="text-gradient-gold">Policy</span>
-                    </h1>
-                </FadeUp>
 
                 <FadeUp delay={0.1}>
                     <div className="prose max-w-none space-y-8">

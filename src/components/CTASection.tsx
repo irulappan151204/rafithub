@@ -7,7 +7,7 @@ import { HiArrowRight } from "react-icons/hi";
 
 export default function CTASection() {
     return (
-        <section className="relative py-32 overflow-hidden">
+        <section className="relative overflow-hidden py-32">
             {/* Background Image */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-fixed"
@@ -17,7 +17,7 @@ export default function CTASection() {
                 }}
             />
             {/* Theme-aware Background Overlay - Increased opacity for better text contrast */}
-            <div className="absolute inset-0 bg-[var(--background)]/90 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-[var(--background)]/86 transition-colors duration-300" />
 
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--background)] via-[var(--background)]/95 to-[var(--background)]/90 transition-colors duration-300" />
@@ -26,7 +26,7 @@ export default function CTASection() {
             <div className="container-custom px-4 md:px-8 relative z-10">
                 <div className="max-w-3xl mx-auto text-center">
                     <FadeUp>
-                        <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
+                        <span className="section-kicker">
                             Ready to Transform?
                         </span>
                     </FadeUp>

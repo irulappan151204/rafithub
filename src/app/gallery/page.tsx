@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { HiX, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const galleryImages = [
@@ -91,17 +92,17 @@ export default function GalleryPage() {
 
     const closeLightbox = () => setLightboxOpen(false);
 
-    const goToPrevious = () => {
+    const goToPrevious = useCallback(() => {
         setCurrentImageIndex((prev) =>
             prev === 0 ? galleryImages.length - 1 : prev - 1
         );
-    };
+    }, []);
 
-    const goToNext = () => {
+    const goToNext = useCallback(() => {
         setCurrentImageIndex((prev) =>
             prev === galleryImages.length - 1 ? 0 : prev + 1
         );
-    };
+    }, []);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -110,7 +111,7 @@ export default function GalleryPage() {
             if (e.key === "ArrowLeft") goToPrevious();
             if (e.key === "ArrowRight") goToNext();
         },
-        [lightboxOpen]
+        [lightboxOpen, goToPrevious, goToNext]
     );
 
     useEffect(() => {
@@ -119,21 +120,19 @@ export default function GalleryPage() {
     }, [handleKeyDown]);
 
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero */}
-            <section className="py-16 px-4 md:px-8 text-center">
-                <FadeUp>
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                        Gallery
-                    </span>
-                    <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                        Inside <span className="text-gradient-gold">Rafithub</span>
-                    </h1>
-                    <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">
-                        Take a virtual tour of our world-class facilities, equipment, and the incredible community that makes Rafithub special.
-                    </p>
-                </FadeUp>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Gallery"
+                title={<>Inside <span className="text-gradient-gold">Rafithub</span></>}
+                description="Take a virtual tour of our world-class facilities, equipment, and the incredible community that makes Rafithub special."
+                imageSrc="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=1920&q=80"
+                stats={[
+                    { value: "12", label: "Scenes" },
+                    { value: "3", label: "Filters" },
+                    { value: "HD", label: "Preview" },
+                    { value: "Live", label: "Energy" },
+                ]}
+            />
 
             {/* Category Filter */}
             <section className="container-custom px-4 md:px-8 mb-12">

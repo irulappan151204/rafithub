@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { trainers } from "@/data/trainers";
 import { FaInstagram, FaYoutube, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { HiArrowRight } from "react-icons/hi";
@@ -33,121 +34,119 @@ export default function TrainersPage() {
     const others = trainers.filter((t) => !t.isFeatured);
 
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero Section */}
-            <section className="py-16 px-4 md:px-8 text-center">
-                <FadeUp>
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                        Our Experts
-                    </span>
-                    <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                        Meet Your <span className="text-gradient-gold">Coaches</span>
-                    </h1>
-                    <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">
-                        Led by Mr. India champion Rajith, our 6 certified trainers bring decades of
-                        experience and passion to transform your fitness journey.
-                    </p>
-                </FadeUp>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Our Experts"
+                title={<>Meet Your <span className="text-gradient-gold">Coaches</span></>}
+                description="Led by Mr. India champion Rajith, our 6 certified trainers bring decades of experience and passion to transform your fitness journey."
+                imageSrc="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1920&q=80"
+                stats={[
+                    { value: "6", label: "Coaches" },
+                    { value: "15+", label: "Years" },
+                    { value: "10K+", label: "Members" },
+                    { value: "1:1", label: "Coaching" },
+                ]}
+            />
 
             {/* Featured CEO Card */}
             {featured && (
                 <section className="container-custom px-4 md:px-8 pb-12">
                     <FadeUp>
-                        <Link href={`/trainers/${featured.id}`}>
-                            <motion.div
-                                whileHover={{ y: -6 }}
-                                className="group relative rounded-3xl overflow-hidden bg-[var(--card)] border-2 border-[var(--primary)]/30 hover:border-[var(--primary)] transition-all duration-500 shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)]"
-                            >
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                                    {/* Image Side */}
-                                    <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[550px] overflow-hidden">
-                                        <Image
-                                            src={featured.image}
-                                            alt={featured.name}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                            priority
-                                        />
-                                        {/* Always-dark overlay on image */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-black/10 lg:to-[var(--card)]" />
-                                        {/* Badge */}
-                                        <div className="absolute top-6 left-6">
-                                            <span className="bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg">
-                                                🏆 CEO & Founder
-                                            </span>
-                                        </div>
-                                        {/* Social on Image — always over dark overlay */}
-                                        <div className="absolute bottom-6 left-6 flex gap-3">
-                                            {Object.entries(featured.social).map(([platform, href]) =>
-                                                href ? <SocialIcon key={platform} platform={platform} href={href} /> : null
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Content Side — fully theme-aware */}
-                                    <div className="p-8 lg:p-12 flex flex-col justify-center">
-                                        <span className="text-[var(--primary)] text-sm font-bold uppercase tracking-wider mb-2">
-                                            {featured.title}
+                        <motion.div
+                            whileHover={{ y: -6 }}
+                            className="group relative rounded-3xl overflow-hidden bg-[var(--card)] border-2 border-[var(--primary)]/30 hover:border-[var(--primary)] transition-all duration-500 shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)]"
+                        >
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                                {/* Image Side */}
+                                <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[550px] overflow-hidden">
+                                    <Image
+                                        src={featured.image}
+                                        alt={featured.name}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        priority
+                                    />
+                                    {/* Always-dark overlay on image */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-black/10 lg:to-[var(--card)]" />
+                                    {/* Badge */}
+                                    <div className="absolute top-6 left-6">
+                                        <span className="bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg">
+                                            🏆 CEO & Founder
                                         </span>
-                                        <h2 className="text-4xl lg:text-5xl font-display font-bold text-[var(--card-foreground)] mb-2">
-                                            {featured.name}
-                                        </h2>
-                                        <p className="text-[var(--secondary)] font-semibold mb-6">
-                                            {featured.role}
-                                        </p>
-                                        <p className="text-[var(--muted-foreground)] leading-relaxed mb-6">
-                                            {featured.bio}
-                                        </p>
-
-                                        {/* Achievements */}
-                                        <div className="mb-6">
-                                            <h3 className="text-sm font-bold text-[var(--card-foreground)] uppercase tracking-wider mb-3">
-                                                Key Achievements
-                                            </h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                                {featured.achievements.map((ach) => (
-                                                    <span
-                                                        key={ach}
-                                                        className="text-xs px-3 py-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-lg text-[var(--card-foreground)] font-medium"
-                                                    >
-                                                        {ach}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Specializations */}
-                                        <div className="mb-6">
-                                            <div className="flex flex-wrap gap-2">
-                                                {featured.specializations.slice(0, 3).map((spec) => (
-                                                    <span
-                                                        key={spec}
-                                                        className="text-xs px-3 py-1.5 bg-[var(--secondary)]/10 border border-[var(--secondary)]/25 rounded-full text-[var(--secondary)] font-semibold"
-                                                    >
-                                                        {spec}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Certifications */}
-                                        <p className="text-xs text-[var(--muted-foreground)] mb-6">
-                                            <span className="font-bold text-[var(--card-foreground)]">Certifications: </span>
-                                            {featured.certifications.join(" | ")}
-                                        </p>
-
-                                        <motion.span
-                                            whileHover={{ scale: 1.05 }}
-                                            className="btn-primary text-center flex items-center justify-center gap-2 w-fit"
-                                        >
-                                            View Full Profile
-                                            <HiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                        </motion.span>
+                                    </div>
+                                    {/* Social on Image — always over dark overlay */}
+                                    <div className="absolute bottom-6 left-6 flex gap-3">
+                                        {Object.entries(featured.social).filter(([platform]) => platform !== 'instagram' && platform !== 'facebook').map(([platform, href]) =>
+                                            href ? <SocialIcon key={platform} platform={platform} href={href} /> : null
+                                        )}
                                     </div>
                                 </div>
-                            </motion.div>
-                        </Link>
+
+                                {/* Content Side — fully theme-aware */}
+                                <div className="p-8 lg:p-12 flex flex-col justify-center">
+                                    <span className="text-[var(--primary)] text-sm font-bold uppercase tracking-wider mb-2">
+                                        {featured.title}
+                                    </span>
+                                    <h2 className="text-4xl lg:text-5xl font-display font-bold text-[var(--card-foreground)] mb-2">
+                                        {featured.name}
+                                    </h2>
+                                    <p className="text-[var(--secondary)] font-semibold mb-6">
+                                        {featured.role}
+                                    </p>
+                                    <p className="text-[var(--muted-foreground)] leading-relaxed mb-6">
+                                        {featured.bio}
+                                    </p>
+
+                                    {/* Achievements */}
+                                    <div className="mb-6">
+                                        <h3 className="text-sm font-bold text-[var(--card-foreground)] uppercase tracking-wider mb-3">
+                                            Key Achievements
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            {featured.achievements.map((ach) => (
+                                                <span
+                                                    key={ach}
+                                                    className="text-xs px-3 py-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-lg text-[var(--card-foreground)] font-medium"
+                                                >
+                                                    {ach}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Specializations */}
+                                    <div className="mb-6">
+                                        <div className="flex flex-wrap gap-2">
+                                            {featured.specializations.slice(0, 3).map((spec) => (
+                                                <span
+                                                    key={spec}
+                                                    className="text-xs px-3 py-1.5 bg-[var(--secondary)]/10 border border-[var(--secondary)]/25 rounded-full text-[var(--secondary)] font-semibold"
+                                                >
+                                                    {spec}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Certifications */}
+                                    <p className="text-xs text-[var(--muted-foreground)] mb-6">
+                                        <span className="font-bold text-[var(--card-foreground)]">Certifications: </span>
+                                        {featured.certifications.join(" | ")}
+                                    </p>
+
+                                    <Link href={`/trainers/${featured.id}`}>
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="btn-primary text-center flex items-center justify-center gap-2 w-fit group/btn"
+                                        >
+                                            View Full Profile
+                                            <HiArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                                        </motion.button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </motion.div>
                     </FadeUp>
                 </section>
             )}
@@ -160,9 +159,9 @@ export default function TrainersPage() {
                     </h2>
                 </FadeUp>
 
-                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <StaggerContainer className="flex flex-wrap justify-center gap-8">
                     {others.map((trainer) => (
-                        <StaggerItem key={trainer.id}>
+                        <StaggerItem key={trainer.id} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]">
                             <motion.div
                                 whileHover={{ y: -10 }}
                                 className="group h-full"
@@ -180,7 +179,7 @@ export default function TrainersPage() {
 
                                         {/* Social Links on Hover — over dark overlay */}
                                         <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-16 group-hover:translate-x-0 transition-transform duration-300">
-                                            {Object.entries(trainer.social).map(([platform, href]) =>
+                                            {Object.entries(trainer.social).filter(([platform]) => platform !== 'instagram' && platform !== 'facebook').map(([platform, href]) =>
                                                 href ? <SocialIcon key={platform} platform={platform} href={href} /> : null
                                             )}
                                         </div>

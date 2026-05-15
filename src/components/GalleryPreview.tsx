@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
 import { HiArrowRight } from "react-icons/hi";
+import { TiltCard } from "./PremiumMotion";
 
 const galleryImages = [
     {
@@ -41,14 +42,14 @@ const galleryImages = [
 
 export default function GalleryPreview() {
     return (
-        <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
+        <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background elements to smooth transitions */}
             <div className="absolute inset-0 bg-gradient-to-b from-[var(--card)] to-[var(--background)] opacity-50 pointer-events-none" />
 
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="text-[var(--secondary)] font-medium uppercase tracking-wider text-sm">
+                    <span className="section-kicker text-[var(--secondary)]">
                         Our Facilities
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -72,10 +73,7 @@ export default function GalleryPreview() {
                                     : "col-span-1 row-span-1"
                                 }`}
                         >
-                            <motion.div
-                                whileHover={{ scale: 1.02 }}
-                                className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer border border-[var(--border)]"
-                            >
+                            <TiltCard className="group h-full w-full cursor-pointer border border-[var(--border)]" depth={7}>
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
@@ -108,7 +106,7 @@ export default function GalleryPreview() {
                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--background)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <p className="text-[var(--foreground)] text-sm font-medium">{image.alt}</p>
                                 </div>
-                            </motion.div>
+                            </TiltCard>
                         </StaggerItem>
                     ))}
                 </StaggerContainer>

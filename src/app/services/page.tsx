@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { FadeUp } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import {
     GiWeightLiftingUp,
     GiRunningShoe,
@@ -103,21 +104,19 @@ const services = [
 
 export default function ServicesPage() {
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
-            {/* Hero */}
-            <section className="py-16 px-4 md:px-8 text-center">
-                <FadeUp>
-                    <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                        Our Services
-                    </span>
-                    <h1 className="heading-lg text-[var(--foreground)] mt-4">
-                        Premium <span className="text-gradient-gold">Programs</span>
-                    </h1>
-                    <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto mt-4">
-                        Comprehensive fitness solutions designed to help you achieve your goals faster than ever.
-                    </p>
-                </FadeUp>
-            </section>
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow="Our Services"
+                title={<>Premium <span className="text-gradient-gold">Programs</span></>}
+                description="Comprehensive fitness solutions designed to help you achieve your goals faster than ever."
+                imageSrc="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=1920&q=80"
+                stats={[
+                    { value: "6", label: "Services" },
+                    { value: "1:1", label: "PT" },
+                    { value: "HIIT", label: "Classes" },
+                    { value: "Fuel", label: "Nutrition" },
+                ]}
+            />
 
             {/* Services */}
             <section className="container-custom px-4 md:px-8 pb-20">

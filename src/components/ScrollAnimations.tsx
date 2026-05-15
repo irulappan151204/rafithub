@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useInView, Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, Variants } from "framer-motion";
 import { useRef, ReactNode } from "react";
+import { cardRevealVariants, premiumSpring } from "./PremiumMotion";
 
 interface ScrollAnimationProps {
     children: ReactNode;
@@ -12,29 +13,55 @@ interface ScrollAnimationProps {
 }
 
 const fadeUpVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 34, filter: "blur(12px)" },
+    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 const fadeInVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
+    hidden: { opacity: 0, filter: "blur(10px)" },
+    visible: { opacity: 1, filter: "blur(0px)" },
 };
 
 const scaleInVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1 },
+    hidden: { opacity: 0, scale: 0.94, filter: "blur(10px)" },
+    visible: { opacity: 1, scale: 1, filter: "blur(0px)" },
 };
 
 const slideLeftVariants: Variants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, x: 56, filter: "blur(10px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)" },
 };
 
 const slideRightVariants: Variants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, x: -56, filter: "blur(10px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)" },
 };
+
+function ScrollReveal({
+    children,
+    className,
+    delay,
+    duration,
+    once,
+    variants,
+}: ScrollAnimationProps & { variants: Variants }) {
+    const ref = useRef(null);
+    const shouldReduceMotion = useReducedMotion();
+    const isInView = useInView(ref, { once, margin: "-100px" });
+
+    return (
+        <motion.div
+            ref={ref}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={variants}
+            transition={shouldReduceMotion ? { duration: 0 } : { ...premiumSpring, delay, duration }}
+            className={className}
+        >
+            {children}
+        </motion.div>
+    );
+}
 
 export function FadeUp({
     children,
@@ -43,20 +70,16 @@ export function FadeUp({
     duration = 0.6,
     once = true,
 }: ScrollAnimationProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once, margin: "-100px" });
-
     return (
-        <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={fadeUpVariants}
-            transition={{ duration, delay, ease: "easeOut" }}
+        <ScrollReveal
             className={className}
+            delay={delay}
+            duration={duration}
+            once={once}
+            variants={fadeUpVariants}
         >
             {children}
-        </motion.div>
+        </ScrollReveal>
     );
 }
 
@@ -67,20 +90,16 @@ export function FadeIn({
     duration = 0.6,
     once = true,
 }: ScrollAnimationProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once, margin: "-100px" });
-
     return (
-        <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={fadeInVariants}
-            transition={{ duration, delay, ease: "easeOut" }}
+        <ScrollReveal
             className={className}
+            delay={delay}
+            duration={duration}
+            once={once}
+            variants={fadeInVariants}
         >
             {children}
-        </motion.div>
+        </ScrollReveal>
     );
 }
 
@@ -91,20 +110,16 @@ export function ScaleIn({
     duration = 0.5,
     once = true,
 }: ScrollAnimationProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once, margin: "-100px" });
-
     return (
-        <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={scaleInVariants}
-            transition={{ duration, delay, ease: "easeOut" }}
+        <ScrollReveal
             className={className}
+            delay={delay}
+            duration={duration}
+            once={once}
+            variants={scaleInVariants}
         >
             {children}
-        </motion.div>
+        </ScrollReveal>
     );
 }
 
@@ -115,20 +130,16 @@ export function SlideLeft({
     duration = 0.6,
     once = true,
 }: ScrollAnimationProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once, margin: "-100px" });
-
     return (
-        <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={slideLeftVariants}
-            transition={{ duration, delay, ease: "easeOut" }}
+        <ScrollReveal
             className={className}
+            delay={delay}
+            duration={duration}
+            once={once}
+            variants={slideLeftVariants}
         >
             {children}
-        </motion.div>
+        </ScrollReveal>
     );
 }
 
@@ -139,20 +150,16 @@ export function SlideRight({
     duration = 0.6,
     once = true,
 }: ScrollAnimationProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once, margin: "-100px" });
-
     return (
-        <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={slideRightVariants}
-            transition={{ duration, delay, ease: "easeOut" }}
+        <ScrollReveal
             className={className}
+            delay={delay}
+            duration={duration}
+            once={once}
+            variants={slideRightVariants}
         >
             {children}
-        </motion.div>
+        </ScrollReveal>
     );
 }
 
@@ -169,6 +176,7 @@ export function StaggerContainer({
     stagger = 0.1,
 }: StaggerContainerProps) {
     const ref = useRef(null);
+    const shouldReduceMotion = useReducedMotion();
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
@@ -179,7 +187,8 @@ export function StaggerContainer({
             variants={{
                 visible: {
                     transition: {
-                        staggerChildren: stagger,
+                        staggerChildren: shouldReduceMotion ? 0 : stagger,
+                        delayChildren: shouldReduceMotion ? 0 : 0.04,
                     },
                 },
             }}
@@ -198,7 +207,7 @@ export function StaggerItem({
     className?: string;
 }) {
     return (
-        <motion.div variants={fadeUpVariants} className={className}>
+        <motion.div variants={cardRevealVariants} className={className}>
             {children}
         </motion.div>
     );

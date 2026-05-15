@@ -5,9 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
 import { getTrainerById, trainers } from "@/data/trainers";
-import { FaInstagram, FaYoutube, FaLinkedin, FaFacebook } from "react-icons/fa";
-import { HiMail, HiPhone, HiArrowLeft, HiStar, HiBadgeCheck } from "react-icons/hi";
+import { FaYoutube, FaLinkedin } from "react-icons/fa";
+import { HiArrowLeft, HiStar, HiBadgeCheck } from "react-icons/hi";
 
 export default function TrainerDetailPage() {
     const params = useParams();
@@ -19,7 +20,20 @@ export default function TrainerDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[var(--background)] pt-24 transition-colors duration-300">
+        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+            <PageHero
+                eyebrow={trainer.title}
+                title={<>{trainer.name}</>}
+                description={trainer.bio}
+                imageSrc={trainer.image}
+                align="left"
+                stats={[
+                    { value: trainer.experience.replace(" years", "y"), label: "Experience" },
+                    { value: String(trainer.specializations.length), label: "Specialties" },
+                    { value: String(trainer.certifications.length), label: "Certs" },
+                    { value: String(trainer.achievements.length), label: "Awards" },
+                ]}
+            />
             {/* Back Button */}
             <div className="container-custom px-4 md:px-8 py-4">
                 <Link href="/trainers">
@@ -51,15 +65,7 @@ export default function TrainerDetailPage() {
                             </div>
                             {/* Social Links */}
                             <div className="absolute bottom-6 left-6 flex gap-3">
-                                {trainer.social.instagram && (
-                                    <motion.a
-                                        href={trainer.social.instagram}
-                                        whileHover={{ scale: 1.1 }}
-                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                    >
-                                        <FaInstagram className="w-5 h-5" />
-                                    </motion.a>
-                                )}
+
                                 {trainer.social.youtube && (
                                     <motion.a
                                         href={trainer.social.youtube}
@@ -78,15 +84,7 @@ export default function TrainerDetailPage() {
                                         <FaLinkedin className="w-5 h-5" />
                                     </motion.a>
                                 )}
-                                {trainer.social.facebook && (
-                                    <motion.a
-                                        href={trainer.social.facebook}
-                                        whileHover={{ scale: 1.1 }}
-                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                    >
-                                        <FaFacebook className="w-5 h-5" />
-                                    </motion.a>
-                                )}
+
                             </div>
                         </div>
                     </FadeUp>
@@ -141,31 +139,7 @@ export default function TrainerDetailPage() {
                             </ul>
                         </FadeUp>
 
-                        {/* Contact & Booking */}
-                        <FadeUp delay={0.4} className="mt-8">
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <Link href={`mailto:${trainer.contact.email}`}>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        className="btn-primary flex items-center justify-center gap-2"
-                                    >
-                                        <HiMail className="w-5 h-5" />
-                                        Email {trainer.name.split(" ")[0]}
-                                    </motion.button>
-                                </Link>
-                                <Link href={`tel:${trainer.contact.phone}`}>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        className="btn-outline flex items-center justify-center gap-2"
-                                    >
-                                        <HiPhone className="w-5 h-5" />
-                                        {trainer.contact.phone}
-                                    </motion.button>
-                                </Link>
-                            </div>
-                        </FadeUp>
+
                     </div>
                 </div>
             </section>

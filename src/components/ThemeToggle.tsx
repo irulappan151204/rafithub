@@ -23,7 +23,7 @@ export default function ThemeToggle() {
                 {theme === "dark" ? (
                     <HiSun className="w-5 h-5 text-gym-gold" />
                 ) : (
-                    <HiMoon className="w-5 h-5 text-gym-black" />
+                    <HiMoon className="w-5 h-5 text-[var(--foreground)]" />
                 )}
             </motion.div>
         </motion.button>
