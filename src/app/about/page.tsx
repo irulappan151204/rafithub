@@ -84,9 +84,10 @@ export default function AboutPage() {
                     <SlideRight>
                         <div className="relative aspect-square rounded-3xl overflow-hidden">
                             <Image
-                                src="/trainers/1.jpg"
+                                src="/trainers/1.webp"
                                 alt="Founder Dr. Ranjith"
                                 fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
                                 className="object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/80 to-transparent" />

@@ -173,6 +173,7 @@ export default function GalleryPage() {
                                         src={image.src}
                                         alt={image.alt}
                                         fill
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                     {/* Overlay with permanent dark background for text readability */}
@@ -265,6 +266,7 @@ export default function GalleryPage() {
                                 src={galleryImages[currentImageIndex].src}
                                 alt={galleryImages[currentImageIndex].alt}
                                 fill
+                                sizes="(max-width: 1280px) 92vw, 1024px"
                                 className="object-contain"
                             />
                         </motion.div>

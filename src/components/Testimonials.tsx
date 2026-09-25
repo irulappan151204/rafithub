@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { FadeUp } from "./ScrollAnimations";
 import { HiChevronLeft, HiChevronRight, HiStar } from "react-icons/hi";
@@ -53,6 +53,7 @@ export default function Testimonials() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const shouldReduceMotion = useReducedMotion();
 
     const goToNext = useCallback(() => {
         if (isAnimating) return;
@@ -79,8 +80,12 @@ export default function Testimonials() {
         [isAnimating, currentIndex]
     );
 
-    // Auto-advance
+    // Auto-advance — intentionally no currentIndex in deps so the timer is
+    // NOT restarted on every manual navigation (WCAG 2.1 SC 2.2.2 compliance).
+    // Also disabled for prefers-reduced-motion users.
     useEffect(() => {
+        if (shouldReduceMotion) return;
+
         const timer = setInterval(() => {
             setDirection(1);
             setCurrentIndex((prev) =>
@@ -89,9 +94,29 @@ export default function Testimonials() {
         }, 6000);
 
         return () => clearInterval(timer);
-    }, [currentIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [shouldReduceMotion]);
 
     const current = testimonials[currentIndex];
+
+    // For reduced-motion: crossfade only (no x slide)
+    const slideVariants = shouldReduceMotion
+        ? {
+              enter: { opacity: 0 },
+              center: { opacity: 1 },
+              exit: { opacity: 0 },
+          }
+        : {
+              enter: (dir: number) => ({
+                  x: dir > 0 ? "40%" : "-40%",
+                  opacity: 0,
+              }),
+              center: { x: "0%", opacity: 1 },
+              exit: (dir: number) => ({
+                  x: dir > 0 ? "-40%" : "40%",
+                  opacity: 0,
+              }),
+          };
 
     return (
         <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
@@ -138,8 +163,12 @@ export default function Testimonials() {
                         <HiChevronRight className="w-6 h-6" />
                     </motion.button>
 
-                    {/* Testimonial Card — crossfade slide */}
-                    <div className="relative overflow-hidden min-h-[360px] md:min-h-[320px] flex items-center">
+                    {/* Testimonial Card */}
+                    <div
+                        className="relative overflow-hidden min-h-[360px] md:min-h-[320px] flex items-center"
+                        aria-live="polite"
+                        aria-atomic="true"
+                    >
                         <AnimatePresence
                             initial={false}
                             custom={direction}
@@ -149,27 +178,18 @@ export default function Testimonials() {
                             <motion.div
                                 key={currentIndex}
                                 custom={direction}
-                                variants={{
-                                    enter: (dir: number) => ({
-                                        x: dir > 0 ? "40%" : "-40%",
-                                        opacity: 0,
-                                    }),
-                                    center: {
-                                        x: "0%",
-                                        opacity: 1,
-                                    },
-                                    exit: (dir: number) => ({
-                                        x: dir > 0 ? "-40%" : "40%",
-                                        opacity: 0,
-                                    }),
-                                }}
+                                variants={slideVariants}
                                 initial="enter"
                                 animate="center"
                                 exit="exit"
-                                transition={{
-                                    x: { type: "tween", duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-                                    opacity: { duration: 0.35 },
-                                }}
+                                transition={
+                                    shouldReduceMotion
+                                        ? { duration: 0.2 }
+                                        : {
+                                              x: { type: "tween", duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+                                              opacity: { duration: 0.35 },
+                                          }
+                                }
                                 onAnimationStart={() => setIsAnimating(true)}
                                 className="w-full"
                             >
@@ -180,12 +200,13 @@ export default function Testimonials() {
                                             src={current.image}
                                             alt={current.name}
                                             fill
+                                            sizes="80px"
                                             className="rounded-full object-cover border-2 border-[var(--primary)]"
                                         />
                                     </div>
 
                                     {/* Stars */}
-                                    <div className="flex justify-center gap-1 mb-6">
+                                    <div className="flex justify-center gap-1 mb-6" aria-label={`${current.rating} out of 5 stars`}>
                                         {[...Array(current.rating)].map((_, i) => (
                                             <HiStar
                                                 key={i}
@@ -214,10 +235,12 @@ export default function Testimonials() {
                     </div>
 
                     {/* Dots */}
-                    <div className="flex justify-center gap-2 mt-8">
+                    <div className="flex justify-center gap-2 mt-8" role="tablist" aria-label="Testimonial navigation">
                         {testimonials.map((_, index) => (
                             <button
                                 key={index}
+                                role="tab"
+                                aria-selected={index === currentIndex}
                                 onClick={() => goToSlide(index)}
                                 aria-label={`Go to testimonial ${index + 1}${index === currentIndex ? " (current)" : ""}`}
                                 className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${index === currentIndex

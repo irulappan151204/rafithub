@@ -378,11 +378,23 @@
     filter: blur(72px);
     transform: translateZ(0);
     opacity: 0.52;
+    will-change: transform, opacity;
+}
+
+@keyframes atmosphere-drift-one {
+    0%, 100% { transform: translate3d(-4%, 0%, 0) scale(1); opacity: 0.48; }
+    50% { transform: translate3d(3%, 2%, 0) scale(1.04); opacity: 0.7; }
+}
+
+@keyframes atmosphere-drift-two {
+    0%, 100% { transform: translate3d(4%, 1%, 0) scale(1); opacity: 0.42; }
+    50% { transform: translate3d(-2%, -3%, 0) scale(1.03); opacity: 0.64; }
 }
 
 .atmosphere-ribbon-one {
     left: -28vw;
     top: -12vh;
+    animation: atmosphere-drift-one 18s ease-in-out infinite;
     background:
         linear-gradient(110deg, color-mix(in srgb, var(--primary) 22%, transparent), transparent 56%),
         linear-gradient(160deg, color-mix(in srgb, var(--cyan) 10%, transparent), transparent 68%);
@@ -391,9 +403,18 @@
 .atmosphere-ribbon-two {
     right: -32vw;
     top: 32vh;
+    animation: atmosphere-drift-two 22s ease-in-out infinite;
     background:
         linear-gradient(120deg, transparent 20%, color-mix(in srgb, var(--secondary) 16%, transparent), transparent 78%),
         linear-gradient(45deg, color-mix(in srgb, var(--rose) 7%, transparent), transparent 62%);
+}
+
+/* Skip decorative ambient motion on small screens and low-power devices */
+@media (max-width: 768px) {
+    .atmosphere-ribbon-one,
+    .atmosphere-ribbon-two {
+        animation: none;
+    }
 }
 
 .atmosphere-grid {
@@ -424,4 +445,159 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* ─── New Animations ──────────────────────────────────────────────────────── */
+
+/* Shimmer sweep — applied to .text-gradient-gold and .text-gradient-green
+   heading spans so the gradient visibly shimmers on load.                  */
+@keyframes shimmer-sweep {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+}
+
+.text-gradient-gold {
+    background-size: 200% auto;
+    animation: shimmer-sweep 4s linear infinite;
+}
+
+.text-gradient-green {
+    background-size: 200% auto;
+    animation: shimmer-sweep 4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .text-gradient-gold,
+    .text-gradient-green {
+        animation: none;
+        background-size: 100% auto;
+    }
+}
+
+/* Floating badge — gentle vertical hover for pill badges and kicker labels */
+@keyframes float-badge {
+    0%, 100% { transform: translateY(0px);  }
+    50%       { transform: translateY(-5px); }
+}
+
+.float-badge {
+    animation: float-badge 3.6s ease-in-out infinite;
+    display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .float-badge { animation: none; }
+}
+
+/* Pulse-glow ring — used on stat counters and primary icon wrappers */
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0  0px color-mix(in srgb, var(--primary) 40%, transparent); }
+    50%       { box-shadow: 0 0 20px 6px color-mix(in srgb, var(--primary) 22%, transparent); }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pulse-glow { animation: none; }
+}
+
+/* Reveal underline — animated underline for nav + footer links */
+.reveal-underline {
+    position: relative;
+}
+
+.reveal-underline::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--primary);
+    transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-underline:hover::after {
+    width: 100%;
+}
+
+/* Stagger fade-in for footer columns — triggered by .footer-visible class */
+@keyframes footer-col-in {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+.footer-col {
+    opacity: 0;
+    animation: footer-col-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.footer-col:nth-child(1) { animation-delay: 0.05s; }
+.footer-col:nth-child(2) { animation-delay: 0.15s; }
+.footer-col:nth-child(3) { animation-delay: 0.25s; }
+.footer-col:nth-child(4) { animation-delay: 0.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .footer-col { animation: none; opacity: 1; }
+}
+
+/* Scroll indicator bounce (reusable) */
+@keyframes scroll-bounce {
+    0%, 100% { transform: translateY(0);   }
+    50%       { transform: translateY(8px); }
+}
+
+/* Section entrance — smooth slide from bottom with spring feel */
+@keyframes section-enter {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+.section-enter {
+    animation: section-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .section-enter { animation: none; opacity: 1; transform: none; }
+}
+
+
+/* ─── Fitness Calculator ─────────────────────────────────────────────────── */
+
+/* Hide the native range thumb — we render our own styled thumb in JSX */
+.calc-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 0; height: 0; }
+.calc-slider::-moz-range-thumb      { width: 0; height: 0; border: none; }
+.calc-slider::-ms-thumb             { width: 0; height: 0; }
+
+/* Scrollbar-hide utility (for TiltCard overflow-y-auto on calculator panel) */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Section-level parallax depth tint ─────────────────────────────────── */
+/* Adds a subtle depth gradient at the top of each section so layers feel
+   separated when the parallax hero scrolls away.                            */
+.parallax-section-top::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    top: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, var(--background), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ─── Three.js canvas fade-in ────────────────────────────────────────────── */
+@keyframes canvas-fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+canvas[aria-hidden="true"] {
+    animation: canvas-fadein 1.8s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    canvas[aria-hidden="true"] { display: none; }
 }

@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
+import { trainers } from '@/data/trainers';
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rafithub.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://rafithub.com';
-
-    return [
+    const staticRoutes: MetadataRoute.Sitemap = [
         {
             url: baseUrl,
             lastModified: new Date(),
@@ -53,4 +54,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
     ];
+
+    // Individual trainer profile pages — important for local SEO (trainer names
+    // are searchable terms; each profile page gets its own meta title/description).
+    const trainerRoutes: MetadataRoute.Sitemap = trainers.map((trainer) => ({
+        url: `${baseUrl}/trainers/${trainer.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+    }));
+
+    return [...staticRoutes, ...trainerRoutes];
 }

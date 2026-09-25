@@ -49,7 +49,7 @@ export default function GalleryPreview() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="section-kicker text-[var(--secondary)]">
+                    <span className="section-kicker text-[var(--secondary)] float-badge">
                         Our Facilities
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -78,6 +78,13 @@ export default function GalleryPreview() {
                                     src={image.src}
                                     alt={image.alt}
                                     fill
+                                    sizes={
+                                        image.size === "large"
+                                            ? "(max-width: 768px) 100vw, 50vw"
+                                            : image.size === "tall"
+                                            ? "(max-width: 768px) 50vw, 25vw"
+                                            : "(max-width: 768px) 50vw, 25vw"
+                                    }
                                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                                 {/* Overlay - Always dark to ensure white icon visibility */}

@@ -12,42 +12,47 @@ interface ScrollAnimationProps {
     once?: boolean;
 }
 
+// All variants use only opacity + transform (y / x / scale).
+// filter:blur() is intentionally removed — animating it forces browser
+// repaint on every frame (not compositor-only), which is a primary cause
+// of scroll jank on mid-range devices. GPU-composited opacity+transform
+// is the correct approach for smooth 60fps scroll reveals.
 const fadeUpVariants: Variants = {
-    hidden: { opacity: 0, y: 34, filter: "blur(12px)" },
-    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+    hidden: { opacity: 0, y: 32 },
+    visible: { opacity: 1, y: 0 },
 };
 
 const fadeInVariants: Variants = {
-    hidden: { opacity: 0, filter: "blur(10px)" },
-    visible: { opacity: 1, filter: "blur(0px)" },
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
 };
 
 const scaleInVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.94, filter: "blur(10px)" },
-    visible: { opacity: 1, scale: 1, filter: "blur(0px)" },
+    hidden: { opacity: 0, scale: 0.93 },
+    visible: { opacity: 1, scale: 1 },
 };
 
 const slideLeftVariants: Variants = {
-    hidden: { opacity: 0, x: 56, filter: "blur(10px)" },
-    visible: { opacity: 1, x: 0, filter: "blur(0px)" },
+    hidden: { opacity: 0, x: 48 },
+    visible: { opacity: 1, x: 0 },
 };
 
 const slideRightVariants: Variants = {
-    hidden: { opacity: 0, x: -56, filter: "blur(10px)" },
-    visible: { opacity: 1, x: 0, filter: "blur(0px)" },
+    hidden: { opacity: 0, x: -48 },
+    visible: { opacity: 1, x: 0 },
 };
 
 function ScrollReveal({
     children,
-    className,
-    delay,
-    duration,
-    once,
+    className = "",
+    delay = 0,
+    duration = 0.6,
+    once = true,
     variants,
 }: ScrollAnimationProps & { variants: Variants }) {
     const ref = useRef(null);
     const shouldReduceMotion = useReducedMotion();
-    const isInView = useInView(ref, { once, margin: "-100px" });
+    const isInView = useInView(ref, { once, margin: "-80px" });
 
     return (
         <motion.div
@@ -57,6 +62,9 @@ function ScrollReveal({
             variants={variants}
             transition={shouldReduceMotion ? { duration: 0 } : { ...premiumSpring, delay, duration }}
             className={className}
+            // will-change ensures the element is promoted to its own GPU layer
+            // so transform + opacity animations never trigger a repaint.
+            style={{ willChange: "transform, opacity" }}
         >
             {children}
         </motion.div>
@@ -163,7 +171,8 @@ export function SlideRight({
     );
 }
 
-// Stagger Container
+// ─── Stagger Container ────────────────────────────────────────────────────────
+
 interface StaggerContainerProps {
     children: ReactNode;
     className?: string;
@@ -173,11 +182,11 @@ interface StaggerContainerProps {
 export function StaggerContainer({
     children,
     className = "",
-    stagger = 0.1,
+    stagger = 0.08,
 }: StaggerContainerProps) {
     const ref = useRef(null);
     const shouldReduceMotion = useReducedMotion();
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: "-80px" });
 
     return (
         <motion.div
@@ -207,13 +216,18 @@ export function StaggerItem({
     className?: string;
 }) {
     return (
-        <motion.div variants={cardRevealVariants} className={className}>
+        <motion.div
+            variants={cardRevealVariants}
+            className={className}
+            style={{ willChange: "transform, opacity" }}
+        >
             {children}
         </motion.div>
     );
 }
 
-// Counter Animation
+// ─── Counter (re-export for external use if needed) ───────────────────────────
+
 interface CounterProps {
     target: number;
     suffix?: string;
@@ -231,39 +245,10 @@ export function Counter({
     const isInView = useInView(ref, { once: true });
 
     return (
-        <motion.span
-            ref={ref}
-            className={className}
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-        >
+        <span ref={ref} className={className}>
             {prefix}
-            <motion.span
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            >
-                {isInView && (
-                    <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <CounterNumber target={target} />
-                    </motion.span>
-                )}
-            </motion.span>
+            {isInView ? target.toLocaleString() : "0"}
             {suffix}
-        </motion.span>
+        </span>
     );
 }
-
-function CounterNumber({
-    target,
-}: {
-    target: number;
-}) {
-    return (
-        <span>{target.toLocaleString()}</span>
-    );
-}
-

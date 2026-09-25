@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { FadeUp } from "./ScrollAnimations";
 import { HiArrowRight } from "react-icons/hi";
@@ -8,15 +9,20 @@ import { HiArrowRight } from "react-icons/hi";
 export default function CTASection() {
     return (
         <section className="relative overflow-hidden py-32">
-            {/* Background Image */}
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-fixed"
-                style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80')",
-                }}
-            />
-            {/* Theme-aware Background Overlay - Increased opacity for better text contrast */}
+            {/* Background Image — Next.js Image (no bg-fixed, GPU composited) */}
+            <div className="absolute inset-0">
+                <Image
+                    src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-center"
+                    aria-hidden="true"
+                    priority={false}
+                />
+            </div>
+
+            {/* Theme-aware Background Overlay */}
             <div className="absolute inset-0 bg-[var(--background)]/86 transition-colors duration-300" />
 
             {/* Gradient Overlay */}
@@ -73,7 +79,7 @@ export default function CTASection() {
                         </div>
                     </FadeUp>
 
-                    {/* Trust Indicators - Updated for better contrast */}
+                    {/* Trust Indicators */}
                     <FadeUp delay={0.4}>
                         <div className="mt-12 flex flex-wrap justify-center gap-6 text-[var(--foreground)]/80 text-sm font-medium">
                             <span className="flex items-center gap-2">
@@ -109,7 +115,7 @@ export default function CTASection() {
                 </div>
             </div>
 
-            {/* Decorative Elements */}
+            {/* Decorative wave */}
             <div className="absolute bottom-0 left-0 right-0">
                 <svg
                     viewBox="0 0 1440 120"

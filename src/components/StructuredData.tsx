@@ -1,14 +1,18 @@
 import { socialLinks, businessInfo } from "@/data/contact";
 
 export default function StructuredData() {
+    // Use "ExerciseGym" — the correct Schema.org LocalBusiness subtype.
+    // "Gym" is NOT a valid Schema.org @type and is ignored by Google's
+    // structured data validator; "ExerciseGym" enables rich results.
     const schema = {
         "@context": "https://schema.org",
-        "@type": "Gym",
+        "@type": "ExerciseGym",
         name: businessInfo.name,
         image: `${businessInfo.url}/og-image.jpg`,
         "@id": businessInfo.url,
         url: businessInfo.url,
         telephone: businessInfo.telephone,
+        email: "rafithubmdu@gmail.com",
         address: {
             "@type": "PostalAddress",
             streetAddress: businessInfo.streetAddress,
@@ -48,4 +52,3 @@ export default function StructuredData() {
         />
     );
 }
-

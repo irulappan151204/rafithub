@@ -83,7 +83,7 @@ export default function Services() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="section-kicker text-[var(--secondary)]">
+                    <span className="section-kicker text-[var(--secondary)] float-badge">
                         Our Services
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -101,12 +101,11 @@ export default function Services() {
                         <StaggerItem key={service.title}>
                             <Link href={service.href}>
                                 <TiltCard className="card-glass group p-8" depth={10}>
-                                        {/* Hover Glow Effect */}
+                                        {/* Hover Glow Effect — opacity controlled by CSS class only, no inline override */}
                                         <div
-                                            className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                                            className={`absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-[0.07] rounded-[inherit] pointer-events-none`}
                                             style={{
-                                                backgroundColor: service.color === "gym-green" ? "var(--gym-green)" : "var(--gym-gold)",
-                                                opacity: 0.05
+                                                backgroundColor: service.color === "gym-green" ? "var(--primary)" : "var(--secondary)",
                                             }}
                                         />
 
@@ -142,12 +141,11 @@ export default function Services() {
                                             </motion.span>
                                         </div>
 
-                                        {/* Corner Accent */}
+                                        {/* Corner Accent — opacity controlled by CSS class only, no inline override */}
                                         <div
-                                            className={`absolute top-0 right-0 w-20 h-20 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                                            className={`absolute top-0 right-0 w-20 h-20 rounded-bl-full transition-opacity duration-500 opacity-0 group-hover:opacity-10 pointer-events-none`}
                                             style={{
                                                 background: service.color === "gym-green" ? "var(--primary)" : "var(--secondary)",
-                                                opacity: 0.1
                                             }}
                                         />
                                 </TiltCard>

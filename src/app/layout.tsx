@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import ScrollToTop from "@/components/ScrollToTop";
 import StructuredData from "@/components/StructuredData";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import AmbientScene from "@/components/AmbientScene";
@@ -54,17 +53,22 @@ export const metadata: Metadata = {
     "fitness coaching",
   ],
   authors: [{ name: "Rafithub" }],
+  // Canonical URL — primary signal to Google to use rafithub.com, not
+  // any old .vercel.app preview URL that may still be indexed.
+  alternates: {
+    canonical: "https://rafithub.com",
+  },
   openGraph: {
     title: "Rafithub | Premium Fitness & Personal Training",
     description:
-      "Train smarter. Transform faster. Join Rafithub – Madurai’s premium fitness experience.",
+      "Train smarter. Transform faster. Join Rafithub – Madurai's premium fitness experience.",
     url: "https://rafithub.com",
     siteName: "Rafithub",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://rafithub.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Rafithub Gym Madurai",
@@ -75,8 +79,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rafithub | Premium Fitness Experience",
     description:
-      "Train smarter. Transform faster. Join Rafithub – Madurai’s premium fitness experience.",
-    images: ["/og-image.jpg"],
+      "Train smarter. Transform faster. Join Rafithub – Madurai's premium fitness experience.",
+    images: ["https://rafithub.com/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -102,7 +106,6 @@ export default function RootLayout({
         <StructuredData />
         <ThemeProvider>
           <ErrorBoundary>
-            <ScrollToTop />
             <AmbientScene />
             <SmoothScroll>
               <Navbar />

@@ -63,7 +63,8 @@ export default function TrainersPage() {
                                         src={featured.image}
                                         alt={featured.name}
                                         fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
+                                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                                         priority
                                     />
                                     {/* Always-dark overlay on image */}
@@ -173,6 +174,7 @@ export default function TrainersPage() {
                                             src={trainer.image}
                                             alt={trainer.name}
                                             fill
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
@@ -272,6 +274,7 @@ export default function TrainersPage() {
                             src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80"
                             alt="Train with us"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                         />
                         {/* Always-dark overlay — theme-independent for CTA readability */}

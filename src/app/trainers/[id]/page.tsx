@@ -1,224 +1,52 @@
-"use client";
-
-import { useParams, notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
-import PageHero from "@/components/PageHero";
+// Trainer detail page — server component wrapper for static generation +
+// per-trainer metadata. Client-side motion effects live in the inner component.
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getTrainerById, trainers } from "@/data/trainers";
-import { FaYoutube, FaLinkedin } from "react-icons/fa";
-import { HiArrowLeft, HiStar, HiBadgeCheck } from "react-icons/hi";
+import TrainerDetailClient from "./TrainerDetailClient";
 
-export default function TrainerDetailPage() {
-    const params = useParams();
-    const trainerId = params.id as string;
-    const trainer = getTrainerById(trainerId);
+interface Props {
+    params: { id: string };
+}
 
-    if (!trainer) {
-        notFound();
-    }
+// Pre-generate a static page for every trainer at build time.
+export function generateStaticParams() {
+    return trainers.map((trainer) => ({ id: trainer.id }));
+}
 
-    return (
-        <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
-            <PageHero
-                eyebrow={trainer.title}
-                title={<>{trainer.name}</>}
-                description={trainer.bio}
-                imageSrc={trainer.image}
-                align="left"
-                stats={[
-                    { value: trainer.experience.replace(" years", "y"), label: "Experience" },
-                    { value: String(trainer.specializations.length), label: "Specialties" },
-                    { value: String(trainer.certifications.length), label: "Certs" },
-                    { value: String(trainer.achievements.length), label: "Awards" },
-                ]}
-            />
-            {/* Back Button */}
-            <div className="container-custom px-4 md:px-8 py-4">
-                <Link href="/trainers">
-                    <motion.button
-                        whileHover={{ x: -5 }}
-                        className="flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
-                    >
-                        <HiArrowLeft className="w-5 h-5" />
-                        Back to Trainers
-                    </motion.button>
-                </Link>
-            </div>
+// Per-trainer meta title, description and OG image so Google indexes
+// each profile page independently with meaningful titles.
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const trainer = getTrainerById(params.id);
+    if (!trainer) return {};
 
-            {/* Hero Section */}
-            <section className="container-custom px-4 md:px-8 pb-16">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                    {/* Image */}
-                    <FadeUp>
-                        <div className="relative">
-                            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden">
-                                <Image
-                                    src={trainer.image}
-                                    alt={trainer.name}
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/60 via-transparent to-transparent" />
-                            </div>
-                            {/* Social Links */}
-                            <div className="absolute bottom-6 left-6 flex gap-3">
+    const descriptionSnippet = trainer.bio.slice(0, 155).trimEnd() + "…";
 
-                                {trainer.social.youtube && (
-                                    <motion.a
-                                        href={trainer.social.youtube}
-                                        whileHover={{ scale: 1.1 }}
-                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                    >
-                                        <FaYoutube className="w-5 h-5" />
-                                    </motion.a>
-                                )}
-                                {trainer.social.linkedin && (
-                                    <motion.a
-                                        href={trainer.social.linkedin}
-                                        whileHover={{ scale: 1.1 }}
-                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                    >
-                                        <FaLinkedin className="w-5 h-5" />
-                                    </motion.a>
-                                )}
+    return {
+        title: `${trainer.name} | ${trainer.title}`,
+        description: descriptionSnippet,
+        alternates: {
+            canonical: `https://rafithub.com/trainers/${trainer.id}`,
+        },
+        openGraph: {
+            title: `${trainer.name} | Rafithub`,
+            description: descriptionSnippet,
+            url: `https://rafithub.com/trainers/${trainer.id}`,
+            images: [
+                {
+                    url: `https://rafithub.com${trainer.image}`,
+                    width: 800,
+                    height: 1067,
+                    alt: trainer.name,
+                },
+            ],
+        },
+    };
+}
 
-                            </div>
-                        </div>
-                    </FadeUp>
+export default function TrainerDetailPage({ params }: Props) {
+    const trainer = getTrainerById(params.id);
+    if (!trainer) notFound();
 
-                    {/* Content */}
-                    <div>
-                        <FadeUp>
-                            <span className="text-[var(--primary)] font-medium uppercase tracking-wider text-sm">
-                                {trainer.title}
-                            </span>
-                            <h1 className="heading-lg text-[var(--foreground)] mt-2">{trainer.name}</h1>
-                            <p className="text-[var(--secondary)] font-medium mt-1">{trainer.role}</p>
-                            <div className="flex items-center gap-4 mt-4">
-                                <span className="text-[var(--primary)] font-bold">{trainer.experience} Experience</span>
-                            </div>
-                        </FadeUp>
-
-                        {/* Specializations */}
-                        <FadeUp delay={0.1} className="mt-8">
-                            <h3 className="text-lg font-bold text-[var(--foreground)] mb-4">Specializations</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {trainer.specializations.map((spec) => (
-                                    <span
-                                        key={spec}
-                                        className="px-4 py-2 bg-[var(--primary)]/10 border border-[var(--primary)]/30 rounded-full text-[var(--primary)] text-sm"
-                                    >
-                                        {spec}
-                                    </span>
-                                ))}
-                            </div>
-                        </FadeUp>
-
-                        {/* Bio */}
-                        <FadeUp delay={0.2} className="mt-8">
-                            <h3 className="text-lg font-bold text-[var(--foreground)] mb-4">About</h3>
-                            <p className="text-[var(--muted-foreground)] leading-relaxed">{trainer.bio}</p>
-                        </FadeUp>
-
-                        {/* Certifications */}
-                        <FadeUp delay={0.3} className="mt-8">
-                            <h3 className="text-lg font-bold text-[var(--foreground)] mb-4 flex items-center gap-2">
-                                <HiBadgeCheck className="w-5 h-5 text-[var(--secondary)]" />
-                                Certifications
-                            </h3>
-                            <ul className="space-y-2">
-                                {trainer.certifications.map((cert) => (
-                                    <li key={cert} className="flex items-center gap-3 text-[var(--muted-foreground)]">
-                                        <span className="w-2 h-2 bg-[var(--primary)] rounded-full" />
-                                        {cert}
-                                    </li>
-                                ))}
-                            </ul>
-                        </FadeUp>
-
-
-                    </div>
-                </div>
-            </section>
-
-            {/* Achievements */}
-            <section className="container-custom px-4 md:px-8 pb-16">
-                <FadeUp>
-                    <h2 className="heading-md text-[var(--foreground)] mb-8 flex items-center gap-3">
-                        <HiStar className="w-8 h-8 text-[var(--secondary)]" />
-                        Achievements
-                    </h2>
-                </FadeUp>
-                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {trainer.achievements.map((achievement) => (
-                        <StaggerItem key={achievement}>
-                            <div className="card-glass p-6 text-center h-full bg-[var(--card)] border border-[var(--border)]">
-                                <p className="text-[var(--foreground)] font-medium">{achievement}</p>
-                            </div>
-                        </StaggerItem>
-                    ))}
-                </StaggerContainer>
-            </section>
-
-            {/* Gallery */}
-            <section className="container-custom px-4 md:px-8 pb-20">
-                <FadeUp>
-                    <h2 className="heading-md text-[var(--foreground)] mb-8">Gallery</h2>
-                </FadeUp>
-                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {trainer.gallery.map((img, index) => (
-                        <StaggerItem key={index}>
-                            <motion.div
-                                whileHover={{ scale: 1.02 }}
-                                className="relative aspect-video rounded-2xl overflow-hidden shadow-sm"
-                            >
-                                <Image
-                                    src={img}
-                                    alt={`${trainer.name} gallery ${index + 1}`}
-                                    fill
-                                    className="object-cover"
-                                />
-                            </motion.div>
-                        </StaggerItem>
-                    ))}
-                </StaggerContainer>
-            </section>
-
-            {/* Other Trainers */}
-            <section className="container-custom px-4 md:px-8 pb-20">
-                <FadeUp>
-                    <h2 className="heading-md text-[var(--foreground)] mb-8">Other Trainers</h2>
-                </FadeUp>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {trainers
-                        .filter((t) => t.id !== trainerId)
-                        .slice(0, 3)
-                        .map((t) => (
-                            <Link key={t.id} href={`/trainers/${t.id}`}>
-                                <motion.div
-                                    whileHover={{ y: -5 }}
-                                    className="relative aspect-[3/4] rounded-2xl overflow-hidden group shadow-md"
-                                >
-                                    <Image
-                                        src={t.image}
-                                        alt={t.name}
-                                        fill
-                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                    />
-                                    {/* Gradient Overlay - Always dark for text readability */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                    <div className="absolute bottom-4 left-4">
-                                        <p className="text-white font-bold">{t.name}</p>
-                                        <p className="text-[var(--primary)] text-sm">{t.role}</p>
-                                    </div>
-                                </motion.div>
-                            </Link>
-                        ))}
-                </div>
-            </section>
-        </div>
-    );
+    return <TrainerDetailClient trainer={trainer!} />;
 }

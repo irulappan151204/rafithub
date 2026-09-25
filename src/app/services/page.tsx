@@ -137,6 +137,7 @@ export default function ServicesPage() {
                                         src={service.image}
                                         alt={service.title}
                                         fill
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
                                         className="object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/60 to-transparent" />
@@ -198,6 +199,7 @@ export default function ServicesPage() {
                             src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&q=80"
                             alt="Gym CTA"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                         />
                         {/* Always dark overlay for text contrast against image */}

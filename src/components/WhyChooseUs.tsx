@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
 import { TiltCard } from "./PremiumMotion";
@@ -63,27 +63,34 @@ function AnimatedCounter({ target }: { target: number }) {
     const [count, setCount] = useState(0);
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
+    const shouldReduceMotion = useReducedMotion();
 
     useEffect(() => {
-        if (isInView) {
-            const duration = 2000;
-            const steps = 60;
-            const increment = target / steps;
-            let current = 0;
+        if (!isInView) return;
 
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    setCount(target);
-                    clearInterval(timer);
-                } else {
-                    setCount(Math.floor(current));
-                }
-            }, duration / steps);
-
-            return () => clearInterval(timer);
+        // Skip animation for reduced-motion users — show final value immediately
+        if (shouldReduceMotion) {
+            setCount(target);
+            return;
         }
-    }, [isInView, target]);
+
+        const duration = 2000;
+        const steps = 60;
+        const increment = target / steps;
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                setCount(target);
+                clearInterval(timer);
+            } else {
+                setCount(Math.floor(current));
+            }
+        }, duration / steps);
+
+        return () => clearInterval(timer);
+    }, [isInView, target, shouldReduceMotion]);
 
     return <span ref={ref}>{count.toLocaleString()}</span>;
 }
@@ -100,7 +107,7 @@ export default function WhyChooseUs() {
             <div className="container-custom relative z-10">
                 {/* Section Header */}
                 <FadeUp className="text-center mb-16">
-                    <span className="section-kicker">
+                    <span className="section-kicker float-badge">
                         Why Choose Us
                     </span>
                     <h2 className="heading-lg text-[var(--foreground)] mt-4">
@@ -149,9 +156,9 @@ export default function WhyChooseUs() {
                                     transition={{ delay: index * 0.1 }}
                                     className="text-center"
                                 >
-                                    <div className="font-display text-5xl md:text-6xl text-[var(--primary)] mb-2">
+                                    <div className="font-display text-5xl md:text-6xl text-[var(--primary)] mb-2 pulse-glow rounded-2xl inline-block px-2">
                                         <AnimatedCounter target={stat.value} />
-                                        {stat.value >= 1000 ? "+" : "+"}
+                                        {stat.value >= 1000 ? "K+" : "+"}
                                     </div>
                                     <div className="text-[var(--muted-foreground)] uppercase tracking-wider text-sm">
                                         {stat.label}

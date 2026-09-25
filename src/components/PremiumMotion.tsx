@@ -24,23 +24,20 @@ export const viewportReveal = {
 } as const;
 
 export const blurRevealVariants: Variants = {
-    hidden: { opacity: 0, y: 34, scale: 0.98, filter: "blur(14px)" },
+    hidden: { opacity: 0, y: 32, scale: 0.97 },
     visible: {
         opacity: 1,
         y: 0,
         scale: 1,
-        filter: "blur(0px)",
         transition: premiumSpring,
     },
 };
 
 export const cardRevealVariants: Variants = {
-    hidden: { opacity: 0, y: 38, rotateX: 10, filter: "blur(12px)" },
+    hidden: { opacity: 0, y: 36 },
     visible: {
         opacity: 1,
         y: 0,
-        rotateX: 0,
-        filter: "blur(0px)",
         transition: premiumSpring,
     },
 };

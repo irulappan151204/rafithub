@@ -43,12 +43,12 @@ export default function Footer() {
     const { theme } = useTheme();
 
     return (
-        <footer className="bg-[var(--card)] border-t border-[var(--border)] text-[var(--foreground)] transition-colors duration-300">
+        <footer className="relative z-10 bg-[var(--card)] border-t border-[var(--border)] text-[var(--foreground)] transition-colors duration-300">
             {/* Main Footer */}
             <div className="container-custom py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* Brand Column */}
-                    <div className="lg:col-span-1">
+                    <div className="lg:col-span-1 footer-col">
                         <Link href="/" className="inline-block mb-6">
                             <div className="flex items-center gap-2">
                                 <Image
@@ -86,7 +86,7 @@ export default function Footer() {
                     </div>
 
                     {/* Contact Info */}
-                    <div>
+                    <div className="footer-col">
                         <h4 className="font-bold text-lg mb-6 text-[var(--foreground)]">
                             Contact Us
                         </h4>
@@ -118,7 +118,7 @@ export default function Footer() {
                     </div>
 
                     {/* Working Hours */}
-                    <div>
+                    <div className="footer-col">
                         <h4 className="font-bold text-lg mb-6 text-[var(--foreground)]">
                             Working Hours
                         </h4>
@@ -141,7 +141,7 @@ export default function Footer() {
                     </div>
 
                     {/* Quick & Services Links (Combined for compact layout) */}
-                    <div>
+                    <div className="footer-col">
                         <h4 className="font-bold text-lg mb-6 text-[var(--foreground)]">
                             Quick Links
                         </h4>
@@ -150,7 +150,7 @@ export default function Footer() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="text-[var(--muted-foreground)] hover:text-[var(--primary)] text-sm transition-colors duration-300 flex items-center gap-2 group"
+                                    className="text-[var(--muted-foreground)] hover:text-[var(--primary)] text-sm transition-colors duration-300 flex items-center gap-2 group reveal-underline"
                                 >
                                     <span className="w-0 h-0.5 bg-[var(--primary)] group-hover:w-2 transition-all duration-300" />
                                     {link.name}
@@ -160,7 +160,7 @@ export default function Footer() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="text-[var(--muted-foreground)] hover:text-[var(--primary)] text-sm transition-colors duration-300 flex items-center gap-2 group"
+                                    className="text-[var(--muted-foreground)] hover:text-[var(--primary)] text-sm transition-colors duration-300 flex items-center gap-2 group reveal-underline"
                                 >
                                     <span className="w-0 h-0.5 bg-[var(--primary)] group-hover:w-2 transition-all duration-300" />
                                     {link.name}
@@ -199,6 +199,7 @@ export default function Footer() {
                 href="https://wa.me/917603903131"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Chat on WhatsApp"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 whileHover={{ scale: 1.1 }}

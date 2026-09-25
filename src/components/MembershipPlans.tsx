@@ -44,7 +44,7 @@ const plans = [
         price: 10000,
         period: "year",
         features: [
-            "All 6-Month features",
+            "All 3-Month features",
             "4 free PT sessions/year",
             "Quarterly nutrition consultation",
             "Exclusive member events",

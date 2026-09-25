@@ -44,7 +44,9 @@ export default function TrainerCards() {
                                             src={featured.image}
                                             alt={featured.name}
                                             fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                            priority
                                         />
                                         {/* Always dark overlay on image for text contrast */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent md:bg-gradient-to-r md:from-transparent md:via-black/10 md:to-[var(--card)]" />
@@ -133,6 +135,7 @@ export default function TrainerCards() {
                                                 src={trainer.image}
                                                 alt={trainer.name}
                                                 fill
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             />
                                             {/* Always-dark overlay for text on image */}

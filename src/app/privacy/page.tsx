@@ -1,8 +1,18 @@
-"use client";
-
+// Privacy policy — server component so metadata can be exported properly.
+// PageHero and FadeUp contain their own "use client" boundaries so the
+// page itself does not need to be a client component.
+import type { Metadata } from "next";
 import { FadeUp } from "@/components/ScrollAnimations";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
+
+export const metadata: Metadata = {
+    title: "Privacy Policy",
+    description: "Read Rafithub's privacy policy — how we collect, use, and protect your personal information as a member of our fitness community.",
+    alternates: {
+        canonical: "https://rafithub.com/privacy",
+    },
+};
 
 export default function PrivacyPage() {
     return (
@@ -15,7 +25,6 @@ export default function PrivacyPage() {
                 align="left"
             />
             <section className="container-custom px-4 md:px-8 py-16">
-
                 <FadeUp delay={0.1}>
                     <div className="prose max-w-none space-y-8">
                         <div className="card-glass p-8">
@@ -70,8 +79,8 @@ export default function PrivacyPage() {
                             <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">6. Contact Us</h2>
                             <p className="text-[var(--muted-foreground)]">
                                 If you have any questions about this Privacy Policy, please contact us at:{" "}
-                                <Link href="mailto:privacy@rafithub.com" className="text-gym-green hover:underline">
-                                    privacy@rafithub.com
+                                <Link href="mailto:rafithubmdu@gmail.com" className="text-[var(--primary)] hover:underline">
+                                    rafithubmdu@gmail.com
                                 </Link>
                             </p>
                         </div>

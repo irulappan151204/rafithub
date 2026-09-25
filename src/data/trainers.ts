@@ -29,14 +29,14 @@ export const trainers: Trainer[] = [
     {
         id: "rajith",
         name: "Dr. Ranjith",
-        role: "CEO & Head Coach — RafiHub Fitness",
+        role: "Founder & Head Coach — RafiHub Fitness",
         title: "Mr. India Champion | Elite Performance Coach",
-        image: "/trainers/1.jpg",
+        image: "/trainers/1.webp",
         isFeatured: true,
         specializations: [
             "Competitive Bodybuilding & Contest Prep",
             "Elite Strength & Conditioning",
-            "CEO-Level Executive Fitness Programs",
+            "Founder-Level Executive Fitness Programs",
             "Mental Toughness & Performance Psychology",
             "Nutrition Strategy for Peak Performance",
         ],
@@ -69,7 +69,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Antony",
         role: "Senior Strength & Combat Coach",
         title: "Power Training Specialist | Combat Fitness Expert",
-        image: "/trainers/2.jpg",
+        image: "/trainers/2.webp",
         specializations: [
             "Powerlifting & Strength Programming",
             "Combat Fitness & MMA Conditioning",
@@ -104,7 +104,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Ganesh",
         role: "Fitness Coach & Body Transformation Specialist",
         title: "Physique Expert | Natural Bodybuilding Advocate",
-        image: "/trainers/3.jpg",
+        image: "/trainers/3.webp",
         specializations: [
             "Natural Bodybuilding & Physique Development",
             "Body Recomposition (Fat Loss + Muscle Gain)",
@@ -139,7 +139,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Madurakavi",
         role: "Chief Dietitian & Nutrition Coach",
         title: "Clinical Nutritionist | Wellness Strategist",
-        image: "/trainers/4.jpg",
+        image: "/trainers/4.webp",
         specializations: [
             "Clinical & Sports Dietetics",
             "Weight Management & Metabolic Health",
@@ -177,7 +177,7 @@ export const trainers: Trainer[] = [
         name: "Mr. Prabha",
         role: "Yoga & Functional Fitness Coach",
         title: "Mind-Body Performance Expert | Mobility Specialist",
-        image: "/trainers/5.jpg",
+        image: "/trainers/5.webp",
         specializations: [
             "Advanced Yoga & Pranayama",
             "Functional Movement & Mobility Training",
@@ -214,7 +214,7 @@ export const trainers: Trainer[] = [
         name: "Ms. Sofia",
         role: "Women's Fitness & Lifestyle Coach",
         title: "Women's Transformation Expert | HIIT & Wellness Specialist",
-        image: "/trainers/6.jpg",
+        image: "/trainers/6.webp",
         accentColor: "#4ade80",
         specializations: [
             "Women's Body Transformation & Toning",
