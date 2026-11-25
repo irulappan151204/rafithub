@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy",
     description: "Read Rafithub's privacy policy — how we collect, use, and protect your personal information as a member of our fitness community.",
     alternates: {
-        canonical: "https://rafithub.com/privacy",
+        canonical: "/privacy",
     },
 };
 

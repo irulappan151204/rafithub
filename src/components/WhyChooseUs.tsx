@@ -22,9 +22,9 @@ const features = [
     },
     {
         icon: HiClock,
-        title: "24/7 Access",
+        title: "Extended Hours",
         description:
-            "Train on your schedule with round-the-clock access to all facilities and equipment.",
+            "Train early or late with flexible hours: Mon–Sat 5 AM – 10 PM and Sun 6 AM – 2 PM.",
     },
     {
         icon: HiShieldCheck,
@@ -52,11 +52,11 @@ const features = [
     },
 ];
 
-const stats = [
-    { label: "Years of Excellence", value: 15 },
-    { label: "Active Members", value: 10000 },
-    { label: "Expert Trainers", value: 50 },
-    { label: "Classes Weekly", value: 100 },
+const defaultStats = [
+    { label: "Years of Excellence", value: 15, suffix: "+" },
+    { label: "Active Members", value: 10, suffix: "K+" },
+    { label: "Expert Trainers", value: 6, suffix: "+" },
+    { label: "Classes Weekly", value: 100, suffix: "+" },
 ];
 
 function AnimatedCounter({ target }: { target: number }) {
@@ -95,7 +95,12 @@ function AnimatedCounter({ target }: { target: number }) {
     return <span ref={ref}>{count.toLocaleString()}</span>;
 }
 
-export default function WhyChooseUs() {
+export default function WhyChooseUs({
+    stats,
+}: {
+    stats?: Array<{ value: number; suffix: string; label: string }>;
+}) {
+    const activeStats = stats && stats.length > 0 ? stats : defaultStats;
     return (
         <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background Elements */}
@@ -147,7 +152,7 @@ export default function WhyChooseUs() {
                     <div className="card-gradient overflow-hidden rounded-3xl p-8 md:p-12">
                         <div className="absolute inset-0 kinetic-grid opacity-25" />
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                            {stats.map((stat, index) => (
+                            {activeStats.map((stat, index) => (
                                 <motion.div
                                     key={stat.label}
                                     initial={{ opacity: 0, y: 20 }}
@@ -158,7 +163,7 @@ export default function WhyChooseUs() {
                                 >
                                     <div className="font-display text-5xl md:text-6xl text-[var(--primary)] mb-2 pulse-glow rounded-2xl inline-block px-2">
                                         <AnimatedCounter target={stat.value} />
-                                        {stat.value >= 1000 ? "K+" : "+"}
+                                        {stat.suffix}
                                     </div>
                                     <div className="text-[var(--muted-foreground)] uppercase tracking-wider text-sm">
                                         {stat.label}

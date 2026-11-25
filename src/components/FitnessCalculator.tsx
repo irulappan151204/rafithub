@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { HiCalculator, HiLightningBolt, HiRefresh } from "react-icons/hi";
 import { GiMuscleUp, GiWeightScale } from "react-icons/gi";
@@ -79,7 +80,7 @@ function BMIDial({ bmi, color, shouldReduceMotion }: { bmi: BMIResult; color: st
                 <circle
                     cx="64" cy="64" r={radius}
                     fill="none"
-                    stroke="rgba(255,255,255,0.08)"
+                    stroke="var(--border)"
                     strokeWidth="10"
                     strokeDasharray={`${arcLength} ${circ}`}
                     strokeLinecap="round"
@@ -104,7 +105,7 @@ function BMIDial({ bmi, color, shouldReduceMotion }: { bmi: BMIResult; color: st
                 <div className="font-display text-3xl font-bold" style={{ color }}>
                     {bmi.value}
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-white/50">BMI</div>
+                <div className="text-[10px] uppercase tracking-widest text-[var(--muted-foreground)]">BMI</div>
             </div>
         </div>
     );
@@ -116,10 +117,10 @@ function MacroBar({ label, grams, color, max }: { label: string; grams: number; 
     return (
         <div className="space-y-1">
             <div className="flex justify-between text-xs">
-                <span className="text-white/60 uppercase tracking-wider">{label}</span>
+                <span className="text-[var(--muted-foreground)] uppercase tracking-wider">{label}</span>
                 <span className="font-bold" style={{ color }}>{grams}g</span>
             </div>
-            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div className="h-1.5 rounded-full bg-[var(--muted)] overflow-hidden">
                 <motion.div
                     className="h-full rounded-full"
                     style={{ backgroundColor: color }}
@@ -141,11 +142,11 @@ function Slider({ label, value, min, max, unit, onChange, color = "var(--primary
     return (
         <div className="space-y-1.5">
             <div className="flex justify-between items-center">
-                <span className="text-xs text-white/60 uppercase tracking-wider">{label}</span>
-                <span className="text-sm font-bold" style={{ color }}>{value}<span className="text-white/40 text-xs ml-0.5">{unit}</span></span>
+                <span className="text-xs text-[var(--muted-foreground)] uppercase tracking-wider">{label}</span>
+                <span className="text-sm font-bold" style={{ color }}>{value}<span className="text-[var(--muted-foreground)] text-xs ml-0.5">{unit}</span></span>
             </div>
             <div className="relative h-6 flex items-center">
-                <div className="absolute inset-x-0 h-1.5 rounded-full bg-white/10" />
+                <div className="absolute inset-x-0 h-1.5 rounded-full bg-[var(--muted)]" />
                 <div
                     className="absolute left-0 h-1.5 rounded-full transition-all duration-100"
                     style={{ width: `${pct}%`, backgroundColor: color }}
@@ -201,7 +202,7 @@ export default function FitnessCalculator() {
     return (
         <div className="w-full h-full flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-4">
                 <div>
                     <p className="text-xs uppercase tracking-[0.24em] text-[var(--primary)]">Fitness Tools</p>
                     <h2 className="mt-0.5 text-xl font-bold text-[var(--card-foreground)] leading-tight">
@@ -214,7 +215,7 @@ export default function FitnessCalculator() {
                         onClick={reset}
                         transition={{ duration: 0.4 }}
                         aria-label="Reset calculator"
-                        className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
+                        className="w-8 h-8 rounded-xl bg-[var(--muted)]/60 border border-[var(--border)] flex items-center justify-center text-[var(--muted-foreground)] hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
                     >
                         <HiRefresh className="w-4 h-4" />
                     </motion.button>
@@ -229,7 +230,7 @@ export default function FitnessCalculator() {
             </div>
 
             {/* Tab switcher */}
-            <div className="flex rounded-xl overflow-hidden border border-white/10 mb-4 bg-white/[0.03]">
+            <div className="flex rounded-xl overflow-hidden border border-[var(--border)] mb-4 bg-[var(--muted)]/40">
                 {(["bmi", "calories"] as Tab[]).map((t) => (
                     <button
                         key={t}
@@ -237,7 +238,7 @@ export default function FitnessCalculator() {
                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 ${
                             tab === t
                                 ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                                : "text-white/50 hover:text-white"
+                                : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                         }`}
                     >
                         {t === "bmi" ? <GiWeightScale className="w-3.5 h-3.5" /> : <GiMuscleUp className="w-3.5 h-3.5" />}
@@ -267,7 +268,7 @@ export default function FitnessCalculator() {
                         className="space-y-3 mb-4 overflow-hidden"
                     >
                         {/* Gender */}
-                        <div className="flex rounded-xl overflow-hidden border border-white/10 bg-white/[0.03]">
+                        <div className="flex rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--muted)]/40">
                             {[true, false].map((male) => (
                                 <button
                                     key={String(male)}
@@ -275,7 +276,7 @@ export default function FitnessCalculator() {
                                     className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
                                         isMale === male
                                             ? "bg-[var(--cyan)]/20 text-[var(--cyan)] border-[var(--cyan)]/30 border"
-                                            : "text-white/40 hover:text-white"
+                                            : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                                     }`}
                                 >
                                     {male ? "Male" : "Female"}
@@ -285,7 +286,7 @@ export default function FitnessCalculator() {
 
                         {/* Activity level */}
                         <div className="space-y-1.5">
-                            <span className="text-xs text-white/60 uppercase tracking-wider">Activity Level</span>
+                            <span className="text-xs text-[var(--muted-foreground)] uppercase tracking-wider">Activity Level</span>
                             <div className="grid grid-cols-5 gap-1">
                                 {([1.2, 1.375, 1.55, 1.725, 1.9] as Activity[]).map((lvl) => (
                                     <button
@@ -295,7 +296,7 @@ export default function FitnessCalculator() {
                                         className={`rounded-lg py-1 text-[10px] font-bold uppercase transition-all duration-200 ${
                                             activity === lvl
                                                 ? "bg-[var(--secondary)]/20 text-[var(--secondary)] border border-[var(--secondary)]/30"
-                                                : "bg-white/5 text-white/40 border border-white/10 hover:text-white"
+                                                : "bg-[var(--muted)]/40 text-[var(--muted-foreground)] border border-[var(--border)] hover:text-[var(--foreground)]"
                                         }`}
                                     >
                                         {activityLabels[lvl].slice(0, 3)}
@@ -305,7 +306,7 @@ export default function FitnessCalculator() {
                         </div>
 
                         {/* Goal */}
-                        <div className="flex rounded-xl overflow-hidden border border-white/10 bg-white/[0.03]">
+                        <div className="flex rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--muted)]/40">
                             {(["loss", "maintain", "gain"] as Goal[]).map((g) => (
                                 <button
                                     key={g}
@@ -313,7 +314,7 @@ export default function FitnessCalculator() {
                                     className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200 ${
                                         goal === g
                                             ? "text-[var(--primary-foreground)]"
-                                            : "text-white/40 hover:text-white"
+                                            : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                                     }`}
                                     style={goal === g ? { backgroundColor: goalColors[g] } : {}}
                                 >
@@ -366,15 +367,15 @@ export default function FitnessCalculator() {
                                 transition={{ duration: shouldReduceMotion ? 0 : 1.2, ease: [0.22, 1, 0.36, 1] }}
                             />
                         </div>
-                        <div className="flex justify-between text-[9px] text-white/30 uppercase tracking-wider mb-3">
+                        <div className="flex justify-between text-[9px] text-[var(--muted-foreground)] uppercase tracking-wider mb-3">
                             <span>Under</span><span>Healthy</span><span>Over</span><span>Obese</span>
                         </div>
 
                         {/* Advice */}
-                        <div className="rounded-2xl bg-gradient-to-br from-white/[0.04] to-white/[0.02] border border-white/10 p-3">
+                        <div className="rounded-2xl bg-[var(--muted)]/40 border border-[var(--border)] p-3">
                             <div className="flex items-start gap-2">
                                 <HiLightningBolt className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: bmiResult.color }} />
-                                <p className="text-xs text-white/70 leading-relaxed">{bmiResult.advice}</p>
+                                <p className="text-xs text-[var(--card-foreground)]/80 leading-relaxed">{bmiResult.advice}</p>
                             </div>
                         </div>
                     </motion.div>
@@ -399,29 +400,29 @@ export default function FitnessCalculator() {
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ duration: 0.4 }}
-                                    className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center"
+                                    className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 p-2.5 text-center"
                                 >
                                     <div className="font-display text-xl font-bold" style={{ color: item.color }}>
                                         {item.value.toLocaleString()}
                                     </div>
-                                    <div className="text-[9px] uppercase tracking-wider text-white/40 mt-0.5">{item.label} kcal</div>
+                                    <div className="text-[9px] uppercase tracking-wider text-[var(--muted-foreground)] mt-0.5">{item.label} kcal</div>
                                 </motion.div>
                             ))}
                         </div>
 
                         {/* Macros */}
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 space-y-2.5">
-                            <p className="text-[10px] uppercase tracking-wider text-white/40 mb-2">Daily Macros</p>
-                            <MacroBar label="Protein" grams={calResult.protein} color="#00f08a" max={300} />
-                            <MacroBar label="Carbs" grams={calResult.carbs} color="#f8d65d" max={500} />
-                            <MacroBar label="Fat" grams={calResult.fat} color="#fb7185" max={150} />
+                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/35 p-3 space-y-2.5">
+                            <p className="text-[10px] uppercase tracking-wider text-[var(--muted-foreground)] mb-2">Daily Macros</p>
+                            <MacroBar label="Protein" grams={calResult.protein} color="var(--primary)" max={300} />
+                            <MacroBar label="Carbs" grams={calResult.carbs} color="var(--secondary)" max={500} />
+                            <MacroBar label="Fat" grams={calResult.fat} color="var(--rose)" max={150} />
                         </div>
 
                         {/* CTA hint */}
-                        <div className="rounded-2xl bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/8 border border-[var(--primary)]/20 p-3">
+                        <div className="rounded-2xl bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/8 border border-[var(--primary)]/20 p-3 space-y-2">
                             <div className="flex items-center gap-2">
                                 <HiLightningBolt className="w-4 h-4 text-[var(--secondary)] flex-shrink-0" />
-                                <p className="text-xs text-white/70 leading-relaxed">
+                                <p className="text-xs text-[var(--card-foreground)]/80 leading-relaxed">
                                     Our nutritionist can build a{" "}
                                     <span style={{ color: goalColors[goal] }} className="font-semibold">
                                         {goal === "loss" ? "fat loss" : goal === "gain" ? "muscle gain" : "maintenance"}
@@ -429,6 +430,12 @@ export default function FitnessCalculator() {
                                     meal plan tailored to you.
                                 </p>
                             </div>
+                            <Link
+                                href={`/contact?bmi=${bmiResult.value}&calories=${calResult.target}&goal=${goal}`}
+                                className="block w-full rounded-xl bg-[var(--primary)] px-3 py-1.5 text-center text-[11px] font-bold text-[var(--primary-foreground)]"
+                            >
+                                Save stats &amp; book free trial
+                            </Link>
                         </div>
                     </motion.div>
                 )}

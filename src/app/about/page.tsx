@@ -25,12 +25,12 @@ const timeline = [
     {
         year: "2018",
         title: "Community Growth",
-        description: "Reached 5,000 active members and opened second location.",
+        description: "Reached 5,000 active members and expanded strength & functional zones in Madurai.",
     },
     {
         year: "2021",
-        title: "Innovation Era",
-        description: "Introduced smart gym technology, mobile app, and virtual training options.",
+        title: "Performance Era",
+        description: "Introduced specialized body composition tracking, nutrition counseling, and transformation coaching.",
     },
     {
         year: "2024",

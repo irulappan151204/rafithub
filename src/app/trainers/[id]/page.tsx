@@ -1,52 +1,79 @@
-// Trainer detail page — server component wrapper for static generation +
-// per-trainer metadata. Client-side motion effects live in the inner component.
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTrainerById, trainers } from "@/data/trainers";
+import { getTrainerById, trainers as fallbackTrainers, type Trainer } from "@/data/trainers";
+import { getPublicTrainers } from "@/server/services/cms";
+import { getSiteUrl } from "@/lib/format";
 import TrainerDetailClient from "./TrainerDetailClient";
 
 interface Props {
-    params: { id: string };
+  params: { id: string };
 }
 
-// Pre-generate a static page for every trainer at build time.
-export function generateStaticParams() {
-    return trainers.map((trainer) => ({ id: trainer.id }));
+export async function generateStaticParams() {
+  const dbTrainers = await getPublicTrainers();
+  if (dbTrainers.length > 0) {
+    return dbTrainers.map((t) => ({ id: t.slug }));
+  }
+  return fallbackTrainers.map((trainer) => ({ id: trainer.id }));
 }
 
-// Per-trainer meta title, description and OG image so Google indexes
-// each profile page independently with meaningful titles.
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const trainer = getTrainerById(params.id);
-    if (!trainer) return {};
-
-    const descriptionSnippet = trainer.bio.slice(0, 155).trimEnd() + "…";
-
+async function resolveTrainer(slug: string): Promise<Trainer | undefined> {
+  const dbTrainers = await getPublicTrainers();
+  const dbMatch = dbTrainers.find((t) => t.slug === slug);
+  if (dbMatch) {
     return {
-        title: `${trainer.name} | ${trainer.title}`,
-        description: descriptionSnippet,
-        alternates: {
-            canonical: `https://rafithub.com/trainers/${trainer.id}`,
-        },
-        openGraph: {
-            title: `${trainer.name} | Rafithub`,
-            description: descriptionSnippet,
-            url: `https://rafithub.com/trainers/${trainer.id}`,
-            images: [
-                {
-                    url: `https://rafithub.com${trainer.image}`,
-                    width: 800,
-                    height: 1067,
-                    alt: trainer.name,
-                },
-            ],
-        },
+      id: dbMatch.slug,
+      name: dbMatch.name,
+      role: dbMatch.role,
+      title: dbMatch.title,
+      image: dbMatch.photoUrl,
+      specializations: dbMatch.specialties,
+      experience: dbMatch.experienceLabel ?? `${dbMatch.experienceYears}+ years`,
+      certifications: dbMatch.certifications,
+      bio: dbMatch.bio,
+      achievements: dbMatch.achievements,
+      gallery: dbMatch.galleryImages,
+      isFeatured: dbMatch.isFeatured,
+      accentColor: dbMatch.accentColor ?? undefined,
+      social: (dbMatch.socialLinks as Record<string, string | undefined>) ?? {},
+      contact: { email: dbMatch.contactEmail ?? "", phone: dbMatch.contactPhone ?? "" },
     };
+  }
+  return getTrainerById(slug);
 }
 
-export default function TrainerDetailPage({ params }: Props) {
-    const trainer = getTrainerById(params.id);
-    if (!trainer) notFound();
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const trainer = await resolveTrainer(params.id);
+  if (!trainer) return {};
 
-    return <TrainerDetailClient trainer={trainer!} />;
+  const siteUrl = getSiteUrl();
+  const descriptionSnippet = trainer.bio.slice(0, 155).trimEnd() + "…";
+
+  return {
+    title: `${trainer.name} | ${trainer.title}`,
+    description: descriptionSnippet,
+    alternates: {
+      canonical: `/trainers/${trainer.id}`,
+    },
+    openGraph: {
+      title: `${trainer.name} | Rafithub`,
+      description: descriptionSnippet,
+      url: `${siteUrl}/trainers/${trainer.id}`,
+      images: [
+        {
+          url: trainer.image.startsWith("http") ? trainer.image : `${siteUrl}${trainer.image}`,
+          width: 800,
+          height: 1067,
+          alt: trainer.name,
+        },
+      ],
+    },
+  };
+}
+
+export default async function TrainerDetailPage({ params }: Props) {
+  const trainer = await resolveTrainer(params.id);
+  if (!trainer) notFound();
+
+  return <TrainerDetailClient trainer={trainer} />;
 }

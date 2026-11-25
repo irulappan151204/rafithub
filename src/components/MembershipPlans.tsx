@@ -6,7 +6,7 @@ import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
 import { TiltCard } from "./PremiumMotion";
 import { HiCheck, HiStar } from "react-icons/hi";
 
-const plans = [
+const defaultPlans = [
     {
         name: "Monthly",
         description: "Perfect for beginners starting their fitness journey",
@@ -57,7 +57,18 @@ const plans = [
     },
 ];
 
-export default function MembershipPlans() {
+export interface PlanCardItem {
+    name: string;
+    description: string;
+    price: number;
+    period: string;
+    features: string[];
+    popular: boolean;
+    color: string;
+}
+
+export default function MembershipPlans({ plans }: { plans?: PlanCardItem[] }) {
+    const activePlans = plans && plans.length > 0 ? plans : defaultPlans;
     return (
         <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background Elements */}
@@ -82,7 +93,7 @@ export default function MembershipPlans() {
 
                 {/* Plans Grid */}
                 <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                    {plans.map((plan) => (
+                    {activePlans.map((plan) => (
                         <StaggerItem key={plan.name}>
                             <TiltCard
                                 className={`relative h-full ${plan.popular ? "lg:-mt-4 lg:mb-4" : ""

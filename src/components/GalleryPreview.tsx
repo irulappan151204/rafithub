@@ -7,40 +7,17 @@ import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
 import { HiArrowRight } from "react-icons/hi";
 import { TiltCard } from "./PremiumMotion";
 
-const galleryImages = [
-    {
-        src: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop",
-        alt: "Modern gym equipment",
-        size: "large",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop",
-        alt: "Group fitness class",
-        size: "small",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&h=300&fit=crop",
-        alt: "Weight training area",
-        size: "small",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1576678927484-cc907957088c?w=600&h=400&fit=crop",
-        alt: "Personal training session",
-        size: "large",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=400&h=500&fit=crop",
-        alt: "Boxing training",
-        size: "tall",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400&h=300&fit=crop",
-        alt: "Cardio zone",
-        size: "small",
-    },
-];
+export interface GalleryPreviewItem {
+    src: string;
+    alt: string;
+    size: string;
+}
 
-export default function GalleryPreview() {
+export default function GalleryPreview({ items = [] }: { items?: GalleryPreviewItem[] }) {
+    const galleryImages = items;
+    if (galleryImages.length === 0) {
+        return null;
+    }
     return (
         <section className="section-padding premium-section bg-[var(--background)] transition-colors duration-300">
             {/* Background elements to smooth transitions */}
@@ -73,7 +50,8 @@ export default function GalleryPreview() {
                                     : "col-span-1 row-span-1"
                                 }`}
                         >
-                            <TiltCard className="group h-full w-full cursor-pointer border border-[var(--border)]" depth={7}>
+                            <Link href="/gallery" className="block h-full w-full" aria-label={`View ${image.alt} in gallery`}>
+                                <TiltCard className="group h-full w-full cursor-pointer border border-[var(--border)]" depth={7}>
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
@@ -114,6 +92,7 @@ export default function GalleryPreview() {
                                     <p className="text-[var(--foreground)] text-sm font-medium">{image.alt}</p>
                                 </div>
                             </TiltCard>
+                            </Link>
                         </StaggerItem>
                     ))}
                 </StaggerContainer>

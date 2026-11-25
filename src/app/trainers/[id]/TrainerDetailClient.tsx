@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
 import PageHero from "@/components/PageHero";
 import { trainers, type Trainer } from "@/data/trainers";
-import { FaYoutube, FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaYoutube, FaLinkedin, FaFacebook } from "react-icons/fa";
 import { HiArrowLeft, HiStar, HiBadgeCheck } from "react-icons/hi";
 
 interface Props {
@@ -62,9 +62,23 @@ export default function TrainerDetailClient({ trainer }: Props) {
                             </div>
                             {/* Social Links */}
                             <div className="absolute bottom-6 left-6 flex gap-3">
-                                {trainer.social.youtube && (
+                                {trainer.social.instagram && trainer.social.instagram !== "#" && (
+                                    <motion.a
+                                        href={trainer.social.instagram}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        whileHover={{ scale: 1.1 }}
+                                        aria-label={`${trainer.name} on Instagram`}
+                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
+                                    >
+                                        <FaInstagram className="w-5 h-5" />
+                                    </motion.a>
+                                )}
+                                {trainer.social.youtube && trainer.social.youtube !== "#" && (
                                     <motion.a
                                         href={trainer.social.youtube}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         whileHover={{ scale: 1.1 }}
                                         aria-label={`${trainer.name} on YouTube`}
                                         className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
@@ -72,14 +86,28 @@ export default function TrainerDetailClient({ trainer }: Props) {
                                         <FaYoutube className="w-5 h-5" />
                                     </motion.a>
                                 )}
-                                {trainer.social.linkedin && (
+                                {trainer.social.linkedin && trainer.social.linkedin !== "#" && (
                                     <motion.a
                                         href={trainer.social.linkedin}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         whileHover={{ scale: 1.1 }}
                                         aria-label={`${trainer.name} on LinkedIn`}
                                         className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
                                     >
                                         <FaLinkedin className="w-5 h-5" />
+                                    </motion.a>
+                                )}
+                                {trainer.social.facebook && trainer.social.facebook !== "#" && (
+                                    <motion.a
+                                        href={trainer.social.facebook}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        whileHover={{ scale: 1.1 }}
+                                        aria-label={`${trainer.name} on Facebook`}
+                                        className="w-12 h-12 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
+                                    >
+                                        <FaFacebook className="w-5 h-5" />
                                     </motion.a>
                                 )}
                             </div>

@@ -4,13 +4,14 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { FadeUp, StaggerContainer, StaggerItem } from "./ScrollAnimations";
-import { trainers } from "@/data/trainers";
-import { FaInstagram, FaYoutube, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { trainers as defaultTrainers, type Trainer } from "@/data/trainers";
+import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { HiArrowRight } from "react-icons/hi";
 
-export default function TrainerCards() {
-    const featured = trainers.find((t) => t.isFeatured);
-    const others = trainers.filter((t) => !t.isFeatured).slice(0, 3);
+export default function TrainerCards({ trainers }: { trainers?: Trainer[] }) {
+    const activeTrainers = trainers && trainers.length > 0 ? trainers : defaultTrainers;
+    const featured = activeTrainers.find((t) => t.isFeatured);
+    const others = activeTrainers.filter((t) => !t.isFeatured).slice(0, 3);
 
     return (
         <section className="section-padding bg-[var(--background)] relative overflow-hidden transition-colors duration-300">
@@ -88,18 +89,18 @@ export default function TrainerCards() {
                                         {/* Social + CTA */}
                                         <div className="flex items-center justify-between">
                                             <div className="flex gap-2">
-                                                {featured.social.instagram && (
-                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors cursor-pointer">
+                                                {featured.social.instagram && featured.social.instagram !== "#" && (
+                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)]">
                                                         <FaInstagram className="w-4 h-4" />
                                                     </span>
                                                 )}
-                                                {featured.social.youtube && (
-                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors cursor-pointer">
+                                                {featured.social.youtube && featured.social.youtube !== "#" && (
+                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)]">
                                                         <FaYoutube className="w-4 h-4" />
                                                     </span>
                                                 )}
-                                                {featured.social.linkedin && (
-                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)] hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors cursor-pointer">
+                                                {featured.social.linkedin && featured.social.linkedin !== "#" && (
+                                                    <span className="w-9 h-9 bg-[var(--accent)] rounded-full flex items-center justify-center text-[var(--muted-foreground)]">
                                                         <FaLinkedin className="w-4 h-4" />
                                                     </span>
                                                 )}
@@ -147,46 +148,6 @@ export default function TrainerCards() {
                                                     View <HiArrowRight className="w-3 h-3" />
                                                 </span>
                                             </div>
-
-                                            {/* Social Links on Hover — always over dark overlay so white icons work */}
-                                            <div className="absolute bottom-20 left-0 right-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                {trainer.social.instagram && (
-                                                    <motion.span
-                                                        whileHover={{ scale: 1.2 }}
-                                                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                                        onClick={(e) => e.preventDefault()}
-                                                    >
-                                                        <FaInstagram className="w-4 h-4" />
-                                                    </motion.span>
-                                                )}
-                                                {trainer.social.youtube && (
-                                                    <motion.span
-                                                        whileHover={{ scale: 1.2 }}
-                                                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                                        onClick={(e) => e.preventDefault()}
-                                                    >
-                                                        <FaYoutube className="w-4 h-4" />
-                                                    </motion.span>
-                                                )}
-                                                {trainer.social.linkedin && (
-                                                    <motion.span
-                                                        whileHover={{ scale: 1.2 }}
-                                                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                                        onClick={(e) => e.preventDefault()}
-                                                    >
-                                                        <FaLinkedin className="w-4 h-4" />
-                                                    </motion.span>
-                                                )}
-                                                {trainer.social.facebook && (
-                                                    <motion.span
-                                                        whileHover={{ scale: 1.2 }}
-                                                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
-                                                        onClick={(e) => e.preventDefault()}
-                                                    >
-                                                        <FaFacebook className="w-4 h-4" />
-                                                    </motion.span>
-                                                )}
-                                            </div>
                                         </div>
 
                                         {/* Info — fully theme-aware */}
@@ -216,14 +177,11 @@ export default function TrainerCards() {
 
                 {/* CTA */}
                 <FadeUp delay={0.3} className="text-center mt-12">
-                    <Link href="/trainers">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="btn-secondary"
-                        >
-                            View All 6 Trainers
-                        </motion.button>
+                    <Link
+                        href="/trainers"
+                        className="btn-secondary inline-flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+                    >
+                        View All {activeTrainers.length} Trainers
                     </Link>
                 </FadeUp>
             </div>

@@ -6,70 +6,36 @@ import Image from "next/image";
 import { FadeUp } from "./ScrollAnimations";
 import { HiChevronLeft, HiChevronRight, HiStar } from "react-icons/hi";
 
-const testimonials = [
-    {
-        name: "Jessica Martinez",
-        role: "Lost 45 lbs in 6 months",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-        content:
-            "Rafithub completely transformed my life. The trainers are incredibly supportive, and the community keeps me motivated every single day. I've never felt stronger or more confident!",
-        rating: 5,
-    },
-    {
-        name: "Michael Thompson",
-        role: "Gained 20 lbs of muscle",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-        content:
-            "The personal training program here is world-class. My coach understood my goals and created a plan that delivered results beyond my expectations. Best investment I've ever made!",
-        rating: 5,
-    },
-    {
-        name: "Amanda Foster",
-        role: "Marathon runner",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-        content:
-            "From couch potato to marathon runner in just one year. The cardio programs and nutrition guidance at Rafithub made this incredible journey possible. Forever grateful!",
-        rating: 5,
-    },
-    {
-        name: "David Park",
-        role: "Business Executive",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-        content:
-            "As a busy professional, the 24/7 access and efficient training programs fit perfectly into my hectic schedule. I've improved my health without sacrificing my career.",
-        rating: 5,
-    },
-    {
-        name: "Sarah Johnson",
-        role: "Fitness Enthusiast",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-        content:
-            "The variety of classes and equipment available is amazing. Whether I want to lift heavy or do yoga, Rafithub has it all. The atmosphere is electric and addictive!",
-        rating: 5,
-    },
-];
+export interface TestimonialItem {
+    name: string;
+    role: string;
+    image: string;
+    content: string;
+    rating: number;
+}
 
-export default function Testimonials() {
+export default function Testimonials({ items = [] }: { items?: TestimonialItem[] }) {
+    const testimonials = items;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const shouldReduceMotion = useReducedMotion();
 
     const goToNext = useCallback(() => {
-        if (isAnimating) return;
+        if (isAnimating || testimonials.length === 0) return;
         setDirection(1);
         setCurrentIndex((prev) =>
             prev === testimonials.length - 1 ? 0 : prev + 1
         );
-    }, [isAnimating]);
+    }, [isAnimating, testimonials.length]);
 
     const goToPrevious = useCallback(() => {
-        if (isAnimating) return;
+        if (isAnimating || testimonials.length === 0) return;
         setDirection(-1);
         setCurrentIndex((prev) =>
             prev === 0 ? testimonials.length - 1 : prev - 1
         );
-    }, [isAnimating]);
+    }, [isAnimating, testimonials.length]);
 
     const goToSlide = useCallback(
         (index: number) => {
@@ -84,7 +50,7 @@ export default function Testimonials() {
     // NOT restarted on every manual navigation (WCAG 2.1 SC 2.2.2 compliance).
     // Also disabled for prefers-reduced-motion users.
     useEffect(() => {
-        if (shouldReduceMotion) return;
+        if (shouldReduceMotion || testimonials.length <= 1) return;
 
         const timer = setInterval(() => {
             setDirection(1);
@@ -94,10 +60,13 @@ export default function Testimonials() {
         }, 6000);
 
         return () => clearInterval(timer);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [shouldReduceMotion]);
+    }, [shouldReduceMotion, testimonials.length]);
 
-    const current = testimonials[currentIndex];
+    if (testimonials.length === 0) {
+        return null;
+    }
+
+    const current = testimonials[currentIndex] ?? testimonials[0];
 
     // For reduced-motion: crossfade only (no x slide)
     const slideVariants = shouldReduceMotion

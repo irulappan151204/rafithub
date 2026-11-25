@@ -1,294 +1,283 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
-import { HiArrowRight, HiPlay } from "react-icons/hi";
-import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { HiArrowRight, HiLocationMarker, HiPlay, HiShieldCheck } from "react-icons/hi";
 import { useDeviceType } from "@/hooks/useDeviceType";
+import { splitHeroHeadline } from "@/lib/hero-text";
 import { blurRevealVariants, Magnetic, TiltCard } from "./PremiumMotion";
-import FitnessCalculator from "./FitnessCalculator";
+import { HeroDeck, type HeroDeckTab } from "./HeroDeck";
 
-// Three.js particles — dynamically loaded, no SSR
+// Three.js particles — dynamically loaded on desktop only
 const HeroParticles = dynamic(() => import("./HeroParticles"), { ssr: false });
 
-// ──────────────────────────────────────────────
-// Desktop Hero Media
-// ──────────────────────────────────────────────
-function DesktopHeroMedia() {
+const DEFAULT_HERO_URLS = new Set([
+  "",
+  "/assets/hero/hero-desktop-lg.webp",
+  "/assets/hero/hero-desktop.jpg",
+]);
+
+function HeroMedia({ heroImageUrl }: { heroImageUrl?: string }) {
+  const customUrl = heroImageUrl?.trim() ?? "";
+  if (customUrl && !DEFAULT_HERO_URLS.has(customUrl)) {
     return (
-        <picture>
-            <source
-                srcSet="
-                    /assets/hero/hero-desktop-sm.webp 1024w,
-                    /assets/hero/hero-desktop-md.webp 1440w,
-                    /assets/hero/hero-desktop-lg.webp 1920w
-                "
-                sizes="100vw"
-                type="image/webp"
-            />
-            <img
-                src="/assets/hero/hero-desktop.jpg"
-                srcSet="
-                    /assets/hero/hero-desktop-sm.webp 1024w,
-                    /assets/hero/hero-desktop-md.webp 1440w,
-                    /assets/hero/hero-desktop-lg.webp 1920w
-                "
-                sizes="100vw"
-                alt="Rafithub gym interior with premium equipment"
-                fetchPriority="high"
-                width={1920}
-                height={1080}
-                className="hero-desktop-image"
-            />
-        </picture>
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={customUrl}
+        alt="Rafithub gym floor and athletic training equipment"
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
     );
+  }
+
+  return (
+    <picture>
+      <source media="(max-width: 768px)" srcSet="/assets/hero/hero-mobile.webp" type="image/webp" />
+      <source
+        media="(min-width: 769px)"
+        srcSet="
+          /assets/hero/hero-desktop-sm.webp 1024w,
+          /assets/hero/hero-desktop-md.webp 1440w,
+          /assets/hero/hero-desktop-lg.webp 1920w
+        "
+        sizes="100vw"
+        type="image/webp"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/assets/hero/hero-desktop.jpg"
+        alt="Rafithub gym interior with premium strength and conditioning equipment"
+        fetchPriority="high"
+        width={1920}
+        height={1080}
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+    </picture>
+  );
 }
 
-// ──────────────────────────────────────────────
-// Mobile Hero Media
-// ──────────────────────────────────────────────
-function MobileHeroMedia() {
-    return (
-        <picture>
-            <source srcSet="/assets/hero/hero-mobile.webp" type="image/webp" />
-            <img
-                src="/assets/hero/hero-mobile.jpg"
-                alt="Rafithub gym - intense training session"
-                fetchPriority="high"
-                width={768}
-                height={1024}
-                className="hero-mobile-image"
-            />
-        </picture>
-    );
+interface HeroProps {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  stats?: Array<{ number: string; label: string }>;
+  heroImageUrl?: string;
+  trialDays?: number;
 }
 
-// ──────────────────────────────────────────────
-// Hero Section
-// ──────────────────────────────────────────────
-function Hero() {
-    const { isMobile } = useDeviceType();
-    const heroRef = useRef<HTMLElement | null>(null);
-    const shouldReduceMotion = useReducedMotion();
+function Hero({
+  eyebrow = "Welcome to Rafithub",
+  title = "Transform Your Body & Mind",
+  subtitle = "Experience world-class coaching, competition-grade equipment, and personalized transformation programs in Madurai.",
+  stats,
+  heroImageUrl,
+  trialDays = 7,
+}: HeroProps) {
+  const { isMobile } = useDeviceType();
+  const heroRef = useRef<HTMLElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const [deckTab, setDeckTab] = useState<HeroDeckTab>("calculator");
 
-    // Scroll-driven values for multi-layer parallax
-    const { scrollYProgress } = useScroll({
-        target: heroRef,
-        offset: ["start start", "end start"],
-    });
+  const headline = splitHeroHeadline(title);
+  const displayStats =
+    stats && stats.length > 0
+      ? stats
+      : [
+          { number: "15+", label: "Years Experience" },
+          { number: "6+", label: "Expert Trainers" },
+          { number: "10K+", label: "Happy Members" },
+          { number: "100+", label: "Weekly Classes" },
+        ];
 
-    // Layer 1 — background image (slowest, deepest)
-    const mediaY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 180]);
-    // Layer 2 — mid-depth decorative blobs
-    const blobY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 100]);
-    // Layer 3 — hero text content
-    const contentY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -70]);
-    // Layer 4 — calculator panel (fastest, closest)
-    const panelY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -130]);
-    // Opacity fade — content fades as you scroll down
-    const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
 
-    // Spring-smooth the parallax for extra organic feel
-    const mediaYSpring = useSpring(mediaY, { stiffness: 60, damping: 20 });
-    const panelYSpring = useSpring(panelY, { stiffness: 80, damping: 22 });
-    const contentYSpring = useSpring(contentY, { stiffness: 80, damping: 22 });
-    const blobYSpring = useSpring(blobY, { stiffness: 50, damping: 18 });
+  const mediaY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 140]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -55]);
+  const panelY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -85]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.72], [1, 0]);
 
-    return (
-        <section
-            ref={heroRef}
-            className="relative isolate flex min-h-screen items-center overflow-hidden bg-gym-black"
-        >
-            {/* ── Layer 0: Background image (deepest parallax) ── */}
-            <motion.div
-                className="absolute inset-0 z-0"
-                style={{ y: shouldReduceMotion ? 0 : mediaYSpring }}
-            >
-                {isMobile ? <MobileHeroMedia /> : <DesktopHeroMedia />}
+  const mediaYSpring = useSpring(mediaY, { stiffness: 60, damping: 20 });
+  const contentYSpring = useSpring(contentY, { stiffness: 80, damping: 22 });
+  const panelYSpring = useSpring(panelY, { stiffness: 80, damping: 22 });
 
-                {/* Colour gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-black/15" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/50" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_32%,rgba(0,240,138,0.22),transparent_30rem)]" />
+  function handleQuickTrialClick() {
+    setDeckTab("trial");
+    const el = document.getElementById("hero-deck");
+    if (el) {
+      el.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth", block: "nearest" });
+    }
+  }
 
-                {/* Static grid overlay */}
-                <div
-                    className="absolute inset-0 opacity-25"
-                    style={{
-                        backgroundImage:
-                            "linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px)",
-                        backgroundSize: "50px 50px",
-                    }}
-                />
+  return (
+    <section
+      ref={heroRef}
+      className="relative isolate flex min-h-screen items-center overflow-x-clip bg-[#050706] pb-14 pt-24 md:pt-28 lg:pb-16"
+    >
+      {/* Layer 0: Parallax Gym Photography + Obsidian Scrims */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{ y: shouldReduceMotion ? 0 : mediaYSpring }}
+      >
+        <HeroMedia heroImageUrl={heroImageUrl} />
+
+        {/* High-contrast cinematic gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050706] via-[#050706]/75 to-[#050706]/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050706] via-[#050706]/35 to-[#050706]/65" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_32%,rgba(0,240,138,0.16),transparent_36rem)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_28%,rgba(248,214,93,0.10),transparent_32rem)]" />
+
+        {/* Subtle precision grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.16]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
+      </motion.div>
+
+      {/* Layer 1: Desktop Three.js particle atmosphere */}
+      {!isMobile && <HeroParticles />}
+
+      {/* Layer 2: Foreground Kinetic Split Layout */}
+      <motion.div
+        className="container-custom relative z-10 px-4 md:px-8"
+        style={{
+          y: shouldReduceMotion ? 0 : contentYSpring,
+          opacity: shouldReduceMotion ? 1 : contentOpacity,
+        }}
+      >
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.12fr)_430px] xl:grid-cols-[minmax(0,1.15fr)_450px]">
+          {/* Left Editorial Spotlight Column */}
+          <motion.div
+            className="space-y-6"
+            variants={{
+              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+            }}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* Telemetry & Authority Pills */}
+            <motion.div variants={blurRevealVariants} className="flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--primary)]/35 bg-[var(--primary)]/12 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--primary)] backdrop-blur-md">
+                <span className="h-2 w-2 rounded-full bg-[var(--primary)] animate-pulse" />
+                {eyebrow}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/85 backdrop-blur-md">
+                <HiLocationMarker className="h-3.5 w-3.5 text-[var(--primary)]" aria-hidden="true" />
+                Kochadai, Madurai
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--secondary)]/30 bg-[var(--secondary)]/10 px-3 py-1.5 text-xs font-semibold text-[var(--secondary)] backdrop-blur-md">
+                <HiShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                Dr. Ranjith · Mr. India
+              </span>
             </motion.div>
 
-            {/* ── Layer 1: Three.js particle canvas ── */}
-            <HeroParticles />
-
-            {/* ── Layer 2: Mid-depth floating blobs (parallax) ── */}
-            <motion.div
-                className="pointer-events-none absolute inset-0 z-[2]"
-                style={{ y: shouldReduceMotion ? 0 : blobYSpring }}
-                aria-hidden="true"
+            {/* Sculpted Editorial Heading */}
+            <motion.h1
+              variants={blurRevealVariants}
+              className="font-display text-[3.1rem] uppercase leading-[0.94] tracking-tight text-white sm:text-6xl md:text-7xl xl:text-[5.5rem]"
             >
-                <div className="absolute top-1/4 right-12 w-40 h-40 rounded-full bg-[var(--primary)]/18 blur-3xl" />
-                <div className="absolute top-1/3 right-1/3 w-24 h-24 rounded-full bg-[var(--cyan)]/12 blur-2xl" />
-                <div className="absolute bottom-1/3 right-1/4 w-56 h-56 rounded-full bg-[var(--secondary)]/10 blur-3xl" />
-            </motion.div>
+              {headline.lead && <span className="block">{headline.lead}</span>}
+              <span className="block text-gradient-green">{headline.accent}</span>
+            </motion.h1>
 
-            {/* ── Layer 3: Content ── */}
-            <motion.div
-                className="container-custom relative z-10 px-4 md:px-8"
-                style={{
-                    y: shouldReduceMotion ? 0 : contentYSpring,
-                    opacity: shouldReduceMotion ? 1 : contentOpacity,
-                }}
+            {/* Subtitle */}
+            <motion.p
+              variants={blurRevealVariants}
+              className="max-w-xl text-base font-medium leading-relaxed text-white/80 sm:text-lg md:text-xl"
             >
-                <div className="grid items-center gap-12 pt-24 lg:grid-cols-[minmax(0,1fr)_440px]">
+              {subtitle}
+            </motion.p>
 
-                    {/* Left — text + stats */}
-                    <motion.div
-                        className="mx-auto max-w-[19rem] sm:mx-0 sm:max-w-4xl"
-                        variants={{
-                            visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-                        }}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {/* Pre-title */}
-                        <motion.div variants={blurRevealVariants} className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-0.5 bg-[var(--primary)]" />
-                            <span className="text-[var(--primary)] font-medium tracking-wider uppercase text-sm float-badge">
-                                Welcome to Rafithub
-                            </span>
-                        </motion.div>
-
-                        {/* Heading */}
-                        <motion.h1
-                            variants={blurRevealVariants}
-                            className="mb-4 max-w-full text-[2.85rem] font-bold uppercase leading-none tracking-normal text-white sm:text-6xl md:text-7xl lg:text-8xl"
-                        >
-                            Transform
-                            <br className="sm:hidden" />
-                            <span className="sm:inline"> Your</span>
-                            <br />
-                            <span className="text-gradient-green">
-                                Body <span className="sm:hidden">&</span>
-                                <br className="sm:hidden" />
-                                <span className="hidden sm:inline">& </span>Mind
-                            </span>
-                        </motion.h1>
-
-                        {/* Sub-heading */}
-                        <motion.p
-                            variants={blurRevealVariants}
-                            className="mb-10 max-w-full text-lg font-medium leading-relaxed text-white/80 sm:max-w-2xl sm:text-xl md:text-2xl"
-                        >
-                            Experience world-class training, cutting-edge equipment, and
-                            personalized programs designed to help you achieve your ultimate
-                            fitness goals.
-                        </motion.p>
-
-                        {/* CTA Buttons */}
-                        <motion.div
-                            variants={blurRevealVariants}
-                            className="flex flex-col gap-4 sm:flex-row sm:flex-wrap"
-                        >
-                            <Link href="/membership">
-                                <Magnetic>
-                                    <motion.button
-                                        whileTap={{ scale: 0.95 }}
-                                        className="btn-primary flex w-full items-center justify-center gap-2 group sm:w-auto"
-                                    >
-                                        Join Now
-                                        <HiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                                    </motion.button>
-                                </Magnetic>
-                            </Link>
-
-                            <Link href="/classes">
-                                <Magnetic>
-                                    <motion.button
-                                        whileTap={{ scale: 0.95 }}
-                                        className="btn-outline flex w-full items-center justify-center gap-2 border-white/35 bg-white/10 text-white hover:border-white hover:bg-white hover:text-black sm:w-auto"
-                                    >
-                                        <HiPlay className="w-5 h-5" />
-                                        Book a Trial
-                                    </motion.button>
-                                </Magnetic>
-                            </Link>
-                        </motion.div>
-
-                        {/* Stats */}
-                        <motion.div
-                            variants={blurRevealVariants}
-                            className="mt-16 grid max-w-full grid-cols-2 gap-4 border-t border-white/15 pt-8 md:max-w-3xl md:grid-cols-4"
-                        >
-                            {[
-                                { number: "15+", label: "Years Experience" },
-                                { number: "6+", label: "Expert Trainers" },
-                                { number: "10K+", label: "Happy Members" },
-                                { number: "100+", label: "Weekly Classes" },
-                            ].map((stat, index) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-                                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center backdrop-blur-md"
-                                >
-                                    <div className="font-display text-4xl md:text-5xl text-[var(--primary)] mb-1">
-                                        {stat.number}
-                                    </div>
-                                    <div className="text-sm text-white/60 uppercase tracking-wider">
-                                        {stat.label}
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </motion.div>
-
-                    {/* ── Layer 4: Calculator panel (closest parallax layer) ── */}
-                    <motion.div
-                        className="hidden lg:flex flex-col"
-                        style={{ y: shouldReduceMotion ? 0 : panelYSpring }}
-                        initial={{ opacity: 0, x: 50, rotateY: -10 }}
-                        animate={{ opacity: 1, x: 0, rotateY: 0 }}
-                        transition={{ delay: 0.5, type: "spring", stiffness: 110, damping: 22 }}
-                    >
-                        <TiltCard className="card-glass p-5 max-h-[82vh] overflow-y-auto scrollbar-hide" depth={6}>
-                            <FitnessCalculator />
-                        </TiltCard>
-                    </motion.div>
-                </div>
-            </motion.div>
-
-            {/* Scroll Indicator */}
+            {/* Primary & Interactive Trial CTAs */}
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.8 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+              variants={blurRevealVariants}
+              className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center"
             >
-                <motion.div
-                    animate={shouldReduceMotion ? undefined : { y: [0, 10, 0] }}
-                    transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                    className="flex flex-col items-center gap-2"
+              <Link href="/membership" className="w-full sm:w-auto">
+                <Magnetic>
+                  <motion.button
+                    whileTap={{ scale: 0.96 }}
+                    className="btn-primary flex w-full items-center justify-center gap-2 group sm:w-auto"
+                  >
+                    <span>Join Now</span>
+                    <HiArrowRight className="transition-transform group-hover:translate-x-1" />
+                  </motion.button>
+                </Magnetic>
+              </Link>
+
+              <Magnetic>
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.96 }}
+                  onClick={handleQuickTrialClick}
+                  className="btn-outline flex w-full items-center justify-center gap-2 border-white/30 bg-white/10 text-white hover:border-[var(--primary)] hover:bg-[var(--primary)] hover:text-black sm:w-auto"
                 >
-                    <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
-                        <motion.div
-                            animate={shouldReduceMotion ? undefined : { y: [0, 10, 0], opacity: [1, 0.3, 1] }}
-                            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-1.5 h-2.5 bg-[var(--primary)] rounded-full"
-                        />
-                    </div>
-                    <span className="text-[10px] text-white/40 uppercase tracking-widest">Scroll</span>
-                </motion.div>
+                  <HiPlay className="h-5 w-5" aria-hidden="true" />
+                  <span>Book {trialDays}-Day Trial</span>
+                </motion.button>
+              </Magnetic>
+
+              <Link
+                href="/classes"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-semibold text-white/80 transition-colors hover:text-[var(--primary)] sm:justify-start"
+              >
+                <span>Explore Classes</span>
+                <HiArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </motion.div>
-        </section>
-    );
+
+            {/* Bento Metric Strip */}
+            <motion.div
+              variants={blurRevealVariants}
+              className="grid grid-cols-2 gap-3 border-t border-white/15 pt-6 sm:grid-cols-4"
+            >
+              {displayStats.slice(0, 4).map((stat) => (
+                <div
+                  key={stat.label}
+                  className="group rounded-2xl border border-white/12 bg-white/[0.04] px-3.5 py-3.5 backdrop-blur-md transition-colors hover:border-[var(--primary)]/45 hover:bg-white/[0.07]"
+                >
+                  <div className="font-display text-3xl md:text-4xl text-[var(--primary)] tabular-nums">
+                    {stat.number}
+                  </div>
+                  <div className="mt-0.5 text-[11px] font-medium uppercase tracking-wider text-white/65">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right Spotlight Deck (Visible on Desktop AND Accessible Below Fold on Mobile/Tablet) */}
+          <motion.div
+            className="w-full"
+            style={{ y: !isMobile && !shouldReduceMotion ? panelYSpring : 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, type: "spring", stiffness: 120, damping: 22 }}
+          >
+            {isMobile ? (
+              <div className="card-glass p-4">
+                <HeroDeck activeTab={deckTab} onTabChange={setDeckTab} trialDays={trialDays} />
+              </div>
+            ) : (
+              <TiltCard className="card-glass p-5" depth={5}>
+                <HeroDeck activeTab={deckTab} onTabChange={setDeckTab} trialDays={trialDays} />
+              </TiltCard>
+            )}
+          </motion.div>
+        </div>
+      </motion.div>
+    </section>
+  );
 }
 
 export default React.memo(Hero);

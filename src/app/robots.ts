@@ -1,17 +1,18 @@
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/format";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rafithub.com';
+const baseUrl = getSiteUrl();
 
 export default function robots(): MetadataRoute.Robots {
-    return {
-        rules: [
-            {
-                userAgent: '*',
-                allow: '/',
-                disallow: ['/api/', '/_next/'],
-            },
-        ],
-        sitemap: `${baseUrl}/sitemap.xml`,
-        host: baseUrl,
-    };
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/_next/", "/admin/", "/login"],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
+  };
 }

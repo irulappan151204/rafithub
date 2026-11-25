@@ -12,7 +12,10 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     const lenisRef = useRef<Lenis | null>(null);
     const pathname = usePathname();
 
+    const isAdminRoute = pathname.startsWith("/admin") || pathname.startsWith("/login");
+
     useEffect(() => {
+        if (isAdminRoute) return;
         // Skip smooth-scroll hijacking entirely on touch devices —
         // native momentum scrolling is smoother and far cheaper there.
         const isFinePointer =
@@ -39,18 +42,11 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
 
         frameId = requestAnimationFrame(raf);
 
-        // Sync Lenis scroll position with framer-motion's useScroll.
-        // framer-motion's useScroll reads window.scrollY on each frame via a
-        // ResizeObserver / scroll event listener pair. Dispatching a synthetic
-        // "scroll" event on the window each time Lenis advances its virtual
-        // position keeps framer-motion's internal tracker in sync so parallax
-        // transforms follow the Lenis easing rather than lagging behind it.
         const syncFramerMotion = () => {
             window.dispatchEvent(new Event("scroll", { bubbles: true }));
         };
         lenis.on("scroll", syncFramerMotion);
 
-        // Don't burn CPU animating scroll while the tab is hidden.
         const handleVisibility = () => {
             if (document.hidden) {
                 cancelAnimationFrame(frameId);
@@ -68,7 +64,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
             lenis.destroy();
             lenisRef.current = null;
         };
-    }, []);
+    }, [isAdminRoute]);
 
     // Reset scroll position on route change via Lenis (correct path).
     // Direct window.scrollTo is intentionally NOT called here — it would

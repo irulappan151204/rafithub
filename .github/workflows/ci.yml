@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**", "phase-*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate Prisma Client & Validate Schema
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/rafithub?schema=public
+          DATABASE_URL_UNPOOLED: postgresql://postgres:postgres@localhost:5432/rafithub?schema=public
+        run: |
+          npx prisma generate
+          npx prisma validate
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit Tests
+        run: npm test
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.rafithub.com
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/rafithub?schema=public
+          DATABASE_URL_UNPOOLED: postgresql://postgres:postgres@localhost:5432/rafithub?schema=public
+          NEON_AUTH_BASE_URL: https://example.neonauth.ap-southeast-1.aws.neon.tech/neondb/auth
+          NEON_AUTH_COOKIE_SECRET: ci-build-placeholder-secret-32-chars-min
+        run: npm run build

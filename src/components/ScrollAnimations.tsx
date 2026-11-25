@@ -22,16 +22,6 @@ const fadeUpVariants: Variants = {
     visible: { opacity: 1, y: 0 },
 };
 
-const fadeInVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-};
-
-const scaleInVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.93 },
-    visible: { opacity: 1, scale: 1 },
-};
-
 const slideLeftVariants: Variants = {
     hidden: { opacity: 0, x: 48 },
     visible: { opacity: 1, x: 0 },
@@ -85,46 +75,6 @@ export function FadeUp({
             duration={duration}
             once={once}
             variants={fadeUpVariants}
-        >
-            {children}
-        </ScrollReveal>
-    );
-}
-
-export function FadeIn({
-    children,
-    className = "",
-    delay = 0,
-    duration = 0.6,
-    once = true,
-}: ScrollAnimationProps) {
-    return (
-        <ScrollReveal
-            className={className}
-            delay={delay}
-            duration={duration}
-            once={once}
-            variants={fadeInVariants}
-        >
-            {children}
-        </ScrollReveal>
-    );
-}
-
-export function ScaleIn({
-    children,
-    className = "",
-    delay = 0,
-    duration = 0.5,
-    once = true,
-}: ScrollAnimationProps) {
-    return (
-        <ScrollReveal
-            className={className}
-            delay={delay}
-            duration={duration}
-            once={once}
-            variants={scaleInVariants}
         >
             {children}
         </ScrollReveal>
@@ -223,32 +173,5 @@ export function StaggerItem({
         >
             {children}
         </motion.div>
-    );
-}
-
-// ─── Counter (re-export for external use if needed) ───────────────────────────
-
-interface CounterProps {
-    target: number;
-    suffix?: string;
-    prefix?: string;
-    className?: string;
-}
-
-export function Counter({
-    target,
-    suffix = "",
-    prefix = "",
-    className = "",
-}: CounterProps) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
-
-    return (
-        <span ref={ref} className={className}>
-            {prefix}
-            {isInView ? target.toLocaleString() : "0"}
-            {suffix}
-        </span>
     );
 }

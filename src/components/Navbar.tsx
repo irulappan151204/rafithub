@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { HiLockClosed, HiMenuAlt3, HiX } from "react-icons/hi";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "./ThemeProvider";
 import { Magnetic } from "./PremiumMotion";
@@ -47,6 +47,10 @@ export default function Navbar() {
     useEffect(() => {
         setIsMobileMenuOpen(false);
     }, [pathname]);
+
+    if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
+        return null;
+    }
 
     return (
         <>
@@ -115,8 +119,18 @@ export default function Navbar() {
                     </div>
 
                     {/* CTA & Theme Toggle */}
-                    <div className="hidden lg:flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-3">
                         <ThemeToggle />
+                        <Link
+                            href="/admin"
+                            className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-colors duration-300 ${useLightNavChrome
+                                ? "border-white/20 bg-white/10 text-white hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                                : "border-[var(--border)] bg-[var(--card)]/80 text-[var(--foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                                }`}
+                        >
+                            <HiLockClosed className="h-3.5 w-3.5" aria-hidden="true" />
+                            <span>Admin Login</span>
+                        </Link>
                         <Link href="/membership">
                             <Magnetic>
                                 <motion.button
@@ -130,7 +144,18 @@ export default function Navbar() {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="lg:hidden flex items-center gap-3">
+                    <div className="lg:hidden flex items-center gap-2">
+                        <Link
+                            href="/admin"
+                            aria-label="Admin Login"
+                            className={`inline-flex items-center gap-1 rounded-xl border px-2.5 py-2 text-xs font-semibold backdrop-blur-xl transition-colors duration-300 ${useLightNavChrome
+                                ? "border-white/20 bg-white/10 text-white hover:border-[var(--primary)]"
+                                : "border-[var(--border)] bg-[var(--card)]/80 text-[var(--foreground)] hover:border-[var(--primary)]"
+                                }`}
+                        >
+                            <HiLockClosed className="h-3.5 w-3.5" aria-hidden="true" />
+                            <span>Admin</span>
+                        </Link>
                         <ThemeToggle />
                         <motion.button
                             whileTap={{ scale: 0.9 }}
@@ -198,10 +223,17 @@ export default function Navbar() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.5 }}
-                                    className="mt-8 mb-8"
+                                    className="mt-8 mb-8 space-y-3"
                                 >
-                                    <Link href="/membership">
+                                    <Link href="/membership" className="block">
                                         <button className="btn-primary w-full shadow-lg">Join Now</button>
+                                    </Link>
+                                    <Link
+                                        href="/admin"
+                                        className="btn-outline w-full flex items-center justify-center gap-2 text-sm"
+                                    >
+                                        <HiLockClosed className="h-4 w-4" aria-hidden="true" />
+                                        <span>Admin Login</span>
                                     </Link>
                                 </motion.div>
                             </div>

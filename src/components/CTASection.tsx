@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FadeUp } from "./ScrollAnimations";
 import { HiArrowRight } from "react-icons/hi";
 
-export default function CTASection() {
+export default function CTASection({ trialDays = 7 }: { trialDays?: number }) {
     return (
         <section className="relative overflow-hidden py-32">
             {/* Background Image — Next.js Image (no bg-fixed, GPU composited) */}
@@ -50,7 +50,7 @@ export default function CTASection() {
                     <FadeUp delay={0.2}>
                         <p className="text-xl text-[var(--foreground)]/80 mb-10 font-medium">
                             Join thousands of members who have already transformed their lives.
-                            Your first week is on us.
+                            Start with a {trialDays}-day free trial.
                         </p>
                     </FadeUp>
 

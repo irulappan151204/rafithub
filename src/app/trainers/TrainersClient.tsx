@@ -1,0 +1,245 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/ScrollAnimations";
+import PageHero from "@/components/PageHero";
+import type { Trainer } from "@/data/trainers";
+import { FaInstagram, FaYoutube, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { HiArrowRight } from "react-icons/hi";
+
+function SocialIcon({ platform, href }: { platform: string; href: string }) {
+  const icons: Record<string, React.ReactNode> = {
+    instagram: <FaInstagram className="w-5 h-5" />,
+    youtube: <FaYoutube className="w-5 h-5" />,
+    linkedin: <FaLinkedin className="w-5 h-5" />,
+    facebook: <FaFacebook className="w-5 h-5" />,
+  };
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={platform}
+      className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[var(--primary)] hover:text-[var(--primary-foreground)] transition-colors"
+    >
+      {icons[platform]}
+    </a>
+  );
+}
+
+export default function TrainersClient({ trainers }: { trainers: Trainer[] }) {
+  const featured = trainers.find((t) => t.isFeatured);
+  const others = trainers.filter((t) => !t.isFeatured);
+
+  return (
+    <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+      <PageHero
+        eyebrow="Our Experts"
+        title={
+          <>
+            Meet Your <span className="text-gradient-gold">Coaches</span>
+          </>
+        }
+        description={`Led by ${featured?.name ?? "Dr. Ranjith"}, our ${trainers.length} certified trainers bring decades of experience and passion to transform your fitness journey.`}
+        imageSrc="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1920&q=80"
+        stats={[
+          { value: String(trainers.length), label: "Coaches" },
+          { value: "15+", label: "Years" },
+          { value: "10K+", label: "Members" },
+          { value: "1:1", label: "Coaching" },
+        ]}
+      />
+
+      {featured && (
+        <section className="container-custom px-4 md:px-8 pb-12">
+          <FadeUp>
+            <motion.div
+              whileHover={{ y: -6 }}
+              className="group relative rounded-3xl overflow-hidden bg-[var(--card)] border-2 border-[var(--primary)]/30 hover:border-[var(--primary)] transition-all duration-500 shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)]"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[550px] overflow-hidden">
+                  <Image
+                    src={featured.image}
+                    alt={featured.name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-black/10 lg:to-[var(--card)]" />
+                  <div className="absolute top-6 left-6">
+                    <span className="bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg">
+                      CEO &amp; Founder
+                    </span>
+                  </div>
+                  <div className="absolute bottom-6 left-6 flex gap-3">
+                    {Object.entries(featured.social)
+                      .filter(([, href]) => Boolean(href) && href !== "#")
+                      .map(([platform, href]) =>
+                        href ? <SocialIcon key={platform} platform={platform} href={href} /> : null
+                      )}
+                  </div>
+                </div>
+
+                <div className="p-8 lg:p-12 flex flex-col justify-center">
+                  <span className="text-[var(--primary)] text-sm font-bold uppercase tracking-wider mb-2">
+                    {featured.title}
+                  </span>
+                  <h2 className="text-4xl lg:text-5xl font-display font-bold text-[var(--card-foreground)] mb-2">
+                    {featured.name}
+                  </h2>
+                  <p className="text-[var(--secondary)] font-semibold mb-6">{featured.role}</p>
+                  <p className="text-[var(--muted-foreground)] leading-relaxed mb-6">
+                    {featured.bio}
+                  </p>
+
+                  <div className="mb-6">
+                    <h3 className="text-sm font-bold text-[var(--card-foreground)] uppercase tracking-wider mb-3">
+                      Key Achievements
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {featured.achievements.map((ach) => (
+                        <span
+                          key={ach}
+                          className="text-xs px-3 py-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 rounded-lg text-[var(--card-foreground)] font-medium"
+                        >
+                          {ach}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {featured.specializations.slice(0, 3).map((spec) => (
+                      <span
+                        key={spec}
+                        className="text-xs px-3 py-1.5 bg-[var(--secondary)]/10 border border-[var(--secondary)]/25 rounded-full text-[var(--secondary)] font-semibold"
+                      >
+                        {spec}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="text-xs text-[var(--muted-foreground)] mb-6">
+                    <span className="font-bold text-[var(--card-foreground)]">Certifications: </span>
+                    {featured.certifications.join(" | ")}
+                  </p>
+
+                  <Link
+                    href={`/trainers/${featured.id}`}
+                    className="btn-primary text-center flex items-center justify-center gap-2 w-fit group/btn"
+                  >
+                    View Full Profile
+                    <HiArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </FadeUp>
+        </section>
+      )}
+
+      <section className="container-custom px-4 md:px-8 pb-20">
+        <FadeUp className="mb-10">
+          <h2 className="heading-md text-[var(--foreground)]">
+            Our <span className="text-gradient-green">Team</span>
+          </h2>
+        </FadeUp>
+
+        <StaggerContainer className="flex flex-wrap justify-center gap-8">
+          {others.map((trainer) => (
+            <StaggerItem
+              key={trainer.id}
+              className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
+            >
+              <motion.div whileHover={{ y: -10 }} className="group h-full">
+                <div className="relative rounded-3xl overflow-hidden bg-[var(--card)] border border-[var(--border)] shadow-[0_2px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-[var(--primary)]/40 transition-all duration-500 h-full flex flex-col">
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <Image
+                      src={trainer.image}
+                      alt={trainer.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                    <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-16 group-hover:translate-x-0 transition-transform duration-300">
+                      {Object.entries(trainer.social)
+                        .filter(([, href]) => Boolean(href) && href !== "#")
+                        .map(([platform, href]) =>
+                          href ? <SocialIcon key={platform} platform={platform} href={href} /> : null
+                        )}
+                    </div>
+
+                    {trainer.accentColor && (
+                      <div className="absolute top-4 left-4">
+                        <span
+                          className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-md"
+                          style={{ backgroundColor: trainer.accentColor }}
+                        >
+                          Women&apos;s Specialist
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <h3 className="text-2xl font-display font-bold text-white mb-1">
+                        {trainer.name}
+                      </h3>
+                      <p className="text-emerald-400 font-semibold text-sm mb-1">{trainer.title}</p>
+                      <p className="text-gray-300 text-xs mb-4">
+                        {trainer.role} · {trainer.experience}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {trainer.specializations.slice(0, 3).map((spec) => (
+                          <span
+                            key={spec}
+                            className="text-[10px] px-2 py-0.5 bg-white/15 backdrop-blur-sm rounded-full text-white/90 font-medium"
+                          >
+                            {spec}
+                          </span>
+                        ))}
+                      </div>
+
+                      <Link
+                        href={`/trainers/${trainer.id}`}
+                        className="inline-flex items-center gap-2 text-sm font-bold text-white group/btn"
+                      >
+                        View Profile
+                        <HiArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div className="p-5 flex-1 flex flex-col">
+                    <p className="text-[var(--muted-foreground)] text-sm leading-relaxed line-clamp-3 mb-4">
+                      {trainer.bio}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {trainer.achievements.slice(0, 3).map((ach) => (
+                        <span
+                          key={ach}
+                          className="text-[11px] px-2 py-1 bg-[var(--primary)]/8 border border-[var(--primary)]/15 rounded-md text-[var(--muted-foreground)] font-medium"
+                        >
+                          {ach}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-[var(--muted-foreground)] mt-auto pt-3 border-t border-[var(--border)]">
+                      <span className="font-bold text-[var(--card-foreground)]">Cert: </span>
+                      {trainer.certifications.join(" | ")}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+      </section>
+    </div>
+  );
+}
